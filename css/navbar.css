@@ -1,0 +1,22 @@
+@import "colorsheet.css";
+
+nav {
+    display: flex;
+    justify-content: space-around;
+
+    a {
+        flex-grow: 1;
+        text-align: center;
+        padding: 20px 30px;
+        color: var(--white);
+        border-bottom: var(--white) 2px solid;
+        text-decoration: none;
+
+        font-size: clamp(1rem, 3vw, 3rem)
+    }
+
+    a:hover {
+        color: var(--secondary);
+        border-bottom: var(--secondary) 2px solid;
+    }
+}
