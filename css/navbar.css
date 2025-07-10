@@ -3,8 +3,10 @@
 nav {
     display: flex;
     justify-content: space-around;
+    position: relative;
 
     a {
+        position: relative;
         flex-grow: 1;
         text-align: center;
         padding: 20px 30px;
@@ -12,11 +14,28 @@ nav {
         border-bottom: var(--white) 2px solid;
         text-decoration: none;
 
-        font-size: clamp(1rem, 3vw, 3rem)
+        font-size: clamp(1rem, 3vw, 2rem)
     }
 
     a:hover {
         color: var(--secondary);
         border-bottom: var(--secondary) 2px solid;
+        transition: border-bottom-color 0.5s;
+    }
+
+    a::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0%;
+        height: 0%;
+        background-color: var(--accent);
+        transition: width 0.5s ease;
+    }
+
+    a:hover::before {
+        height: 2px;
+        width: 100%;
     }
 }
