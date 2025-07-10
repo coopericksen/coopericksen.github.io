@@ -1,5 +1,5 @@
 Website of Cooper Ericksen
 
-<a>https://coopericksen.github.io/</a>
+<a target="_blank">https://coopericksen.github.io/</a>
 
 Initialized July 9th, 2025.
