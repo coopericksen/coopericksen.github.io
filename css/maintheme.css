@@ -9,6 +9,15 @@
 body {
     background-color: var(--background);
     color: var(--text);
-    font-family: "Inter";
+    font-family: "Inter", sans-serif;
     font-display: swap;
+}
+
+h1 {
+    font-size: 3rem;
+    padding: 2vw;
+    margin: 2vw;
+    background-color: var(--primary);
+    border: var(--border) 8px double;
+    border-radius: 20px;
 }

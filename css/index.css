@@ -1,4 +1,4 @@
-@import "colorsheet.css"
+@import "colorsheet.css";
 
 h1 {
     font-size: 3rem;
@@ -6,6 +6,7 @@ h1 {
     margin: 2vw;
     padding: 2vw;
     width: 50vw;
+    background-color: var(--background);
 
     a {
         font-size: inherit;

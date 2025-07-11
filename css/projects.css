@@ -1,0 +1,22 @@
+@import "colorsheet.css";
+
+.videos {
+    background-color: var(--secondary);
+    border: var(--border) 8px double;
+    margin: 2vw;
+    padding: 2vw;
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    max-width: 1500px;
+    gap: 20px;
+    margin-inline: auto;
+}
+
+video {
+    width: 100%;
+    border: var(--accent) 8px;
+    border-style: inset;
+    border-radius: 15px;
+    box-sizing: border-box;
+}
