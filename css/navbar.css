@@ -2,12 +2,13 @@
 
 nav {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 4fr 1fr 1fr 1fr;
+    transition: grid-template-columns 0.5s ease;
     justify-content: space-around;
     position: relative;
 
     a {
-        font-size: 1.2rem;
+        font-size: clamp(12px, 3vw, 1.3rem);
         position: relative;
         flex-grow: 1;
         text-align: center;
@@ -37,5 +38,11 @@ nav {
     a:hover::before {
         height: 2px;
         width: 100%;
+    }
+}
+
+@media (max-width: 700px) {
+    nav {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }
