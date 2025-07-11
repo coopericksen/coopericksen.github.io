@@ -1,26 +1,26 @@
 @import "colorsheet.css";
 
 nav {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     justify-content: space-around;
     position: relative;
 
     a {
+        font-size: 1.2rem;
         position: relative;
         flex-grow: 1;
         text-align: center;
         padding: 20px 30px;
-        color: var(--white);
-        border-bottom: var(--white) 2px solid;
+        color: var(--text);
+        border-bottom: var(--secondary) 1px solid;
         text-decoration: none;
-
-        font-size: clamp(1rem, 3vw, 2rem)
+        transition: color 0.5s;
     }
 
     a:hover {
-        color: var(--secondary);
-        border-bottom: var(--secondary) 2px solid;
-        transition: border-bottom-color 0.5s;
+        color: var(--accent);
+        border-bottom: var(--accent) 2px solid;
     }
 
     a::before {
