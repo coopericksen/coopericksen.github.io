@@ -1,5 +1,17 @@
 @import "colorsheet.css";
 
+@property --gradient-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes rotation {
+    0% { --gradient-angle: 0deg; }
+    100% { --gradient-angle: 360deg; }
+}
+
+
 * {
     margin: 0;
     padding: 0;
@@ -13,11 +25,42 @@ body {
     font-display: swap;
 }
 
-h1 {
+h1,p {
     font-size: 3rem;
     padding: 2vw;
     margin: 2vw;
     background-color: var(--primary);
-    border: var(--border) 8px double;
     border-radius: 20px;
+    position: relative;
+}
+
+.glowborder::before, .glowborder::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    background-image: conic-gradient(from var(--gradient-angle), var(--primary), var(--secondary), var(--accent), var(--border), var(--primary));
+    border-radius: inherit;
+    animation: rotation 8s linear infinite;
+    z-index: -1;
+}
+
+.glowborder::after {
+    filter: blur(1.5rem);
+}
+
+
+p {
+    font-size: 1rem;
+}
+
+.wrapper {
+    margin-inline: auto;
+    box-sizing: border-box;
+    display: grid;
+    max-width: 1500px;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }

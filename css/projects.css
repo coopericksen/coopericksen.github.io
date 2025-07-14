@@ -1,8 +1,19 @@
 @import "colorsheet.css";
 
+@property --gradient-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes rotation {
+    0% { --gradient-angle: 0deg; }
+    100% { --gradient-angle: 360deg; }
+}
+
 .videos {
-    background-color: var(--secondary);
-    border: var(--border) 8px double;
+    /* background-color: var(--secondary); */
+    /* border: var(--border) 8px double; */
     margin: 2vw;
     padding: 2vw;
     border-radius: 20px;
@@ -11,13 +22,33 @@
     max-width: 1500px;
     gap: 20px;
     margin-inline: auto;
-    /* box-sizing: border-box; */
 }
 
 video {
     width: 100%;
-    border: var(--accent) 8px;
-    border-style: inset;
     border-radius: 15px;
     box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+}
+
+.vidcontainer {
+    position: relative;
+}
+
+.vidcontainer::before, .vidcontainer::after {
+    content: '';
+    position: absolute;
+    background-image: conic-gradient(from var(--gradient-angle), var(--primary), var(--orange), var(--primary));
+    width: calc(100% + 12px);
+    height: calc(100% + 8px);
+    bottom: -2px;
+    left: -6px;
+    border-radius: 15px;
+    z-index: 0;
+    animation: rotation 10s linear infinite;
+}
+
+.vidcontainer::before {
+    filter: blur(3.5rem);
 }

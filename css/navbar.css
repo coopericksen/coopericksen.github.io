@@ -3,7 +3,7 @@
 nav {
     display: grid;
     grid-template-columns: 4fr 1fr 1fr 1fr;
-    transition: grid-template-columns 0.5s ease;
+    transition: grid-template-columns 500ms ease;
     justify-content: space-around;
     position: relative;
 
@@ -16,10 +16,10 @@ nav {
         color: var(--text);
         border-bottom: var(--secondary) 1px solid;
         text-decoration: none;
-        transition: color 0.5s;
+        transition: color 500ms;
     }
 
-    a:hover {
+    a:hover, a:focus {
         color: var(--accent);
         border-bottom: var(--accent) 2px solid;
     }
@@ -32,10 +32,10 @@ nav {
         width: 0%;
         height: 0%;
         background-color: var(--accent);
-        transition: width 0.5s ease;
+        transition: width 500ms ease;
     }
 
-    a:hover::before {
+    a:hover::before, a:focus::before {
         height: 2px;
         width: 100%;
     }

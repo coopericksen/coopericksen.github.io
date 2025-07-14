@@ -5,14 +5,15 @@ h1 {
     position: relative;
     margin: 2vw;
     padding: 2vw;
-    width: 50vw;
+    width: 100%;
+    box-sizing: border-box;
     background-color: var(--background);
 
     a {
         font-size: inherit;
         color: var(--primary);
         text-decoration: none;
-        transition: color 0.5s;
+        transition: color 500ms;
         position: relative;
         display: inline-block;
 
@@ -22,7 +23,7 @@ h1 {
         }
     }
 
-    a:hover {
+    a:hover, a:focus {
         color: var(--accent);
     }
 
@@ -34,10 +35,11 @@ h1 {
         width: 0%;
         height: 0%;
         background-color: var(--accent);
-        transition: width 0.5s ease;
+        /* display: inline; */
+        transition: width 500ms ease;
     }
 
-    a:hover::before {
+    a:hover::before, a:focus::before{
         height: 2px;
         width: 96%;
     }
