@@ -12,8 +12,6 @@
 }
 
 .videos {
-    /* background-color: var(--secondary); */
-    /* border: var(--border) 8px double; */
     margin: 2vw;
     padding: 2vw;
     border-radius: 20px;
@@ -39,7 +37,7 @@ video {
 .vidcontainer::before, .vidcontainer::after {
     content: '';
     position: absolute;
-    background-image: conic-gradient(from var(--gradient-angle), var(--primary), var(--orange), var(--primary));
+    background-image: conic-gradient(from var(--gradient-angle), var(--primary), var(--secondary), var(--orange), var(--border), var(--primary));
     width: calc(100% + 12px);
     height: calc(100% + 8px);
     bottom: -2px;
