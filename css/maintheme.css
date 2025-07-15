@@ -77,6 +77,6 @@ p {
     transition: padding 200ms ease;
 }
 
-.abutton:hover {
+.abutton:hover, .abutton:focus {
     padding: 2vh 4vw;
 }
