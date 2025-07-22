@@ -15,25 +15,28 @@
     margin: 0;
     padding: 0;
     font-size: 16px;
+    font-family: "Inter", sans-serif;
+    font-display: swap;
 }
 
 body {
     background-color: var(--background);
     color: var(--text);
-    font-family: "Inter", sans-serif;
-    font-display: swap;
 }
 
-h1,p {
+h1,section {
     font-size: 3rem;
-    padding: 2vw;
+    height: fit-content;
+    padding: 2vh 2vw;
     margin: 2vw;
-    background-color: var(--primary);
+    background-color: var(--background);
     border-radius: 20px;
     position: relative;
+    align-content: center;
+    text-align: center;
 }
 
-.glowborder::before, .glowborder::after {
+.glow-border::before, .glow-border::after {
     content: '';
     position: absolute;
     bottom: -5px;
@@ -46,22 +49,8 @@ h1,p {
     z-index: -1;
 }
 
-.glowborder::after {
+.glow-border::after {
     filter: blur(0.5rem);
-}
-
-
-p {
-    font-size: 1rem;
-}
-
-.wrapper {
-    margin-inline: auto;
-    box-sizing: border-box;
-    display: grid;
-    max-width: 1500px;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
 }
 
 .abutton {
@@ -75,6 +64,7 @@ p {
     cursor: pointer;
     text-decoration: none;
     transition: padding 200ms ease;
+    border: var(--border) 2px solid;
 }
 
 .abutton:hover, .abutton:focus {

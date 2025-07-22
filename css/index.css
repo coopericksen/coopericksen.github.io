@@ -3,9 +3,6 @@
 h1 {
     font-size: 3rem;
     position: relative;
-    margin: 2vw;
-    padding: 2vw;
-    width: 100%;
     box-sizing: border-box;
     background-color: var(--background);
 
@@ -35,7 +32,6 @@ h1 {
         width: 0%;
         height: 0%;
         background-color: var(--accent);
-        /* display: inline; */
         transition: width 500ms ease;
     }
 
@@ -43,4 +39,16 @@ h1 {
         height: 2px;
         width: 96%;
     }
+}
+
+h2 {
+    font-size: 2.5rem;
+    p {
+        font-size: 2.5rem;
+        display: inline-block;
+    }
+}
+
+#clocklink {
+    color: var(--text)
 }

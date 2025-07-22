@@ -2,10 +2,10 @@
 
 nav {
     display: grid;
-    grid-template-columns: 4fr 1fr 1fr 1fr;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
     transition: grid-template-columns 500ms ease;
     justify-content: space-around;
-    position: relative;
+    position: sticky;
     background-color: var(--background);
 
     a {
@@ -13,11 +13,12 @@ nav {
         position: relative;
         flex-grow: 1;
         text-align: center;
-        padding: 20px 30px;
+        padding: 10px;
         color: var(--text);
         border-bottom: var(--secondary) 3px solid;
         text-decoration: none;
         transition: color 500ms;
+        align-content: center;
     }
 
     a:hover, a:focus {
@@ -44,10 +45,29 @@ nav {
     a::after {
         filter: blur(1.5rem);
     }
+
+    .navlogo {
+        border-bottom: var(--secondary) 3px solid;
+        img {
+            width: 50px;
+            height: 50px;
+            /* inset: 0; */
+        }
+    }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
+    nav {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 500px) {
     nav {
         grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    .navhome {
+        display: none;
     }
 }
