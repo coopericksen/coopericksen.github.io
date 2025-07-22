@@ -23,6 +23,12 @@
     margin-inline: auto;
 }
 
+@media (max-width: 500px) {
+  .videos {
+    grid-template-columns: 1fr;
+  }
+}
+
 video {
     width: 100%;
     border-radius: 15px;

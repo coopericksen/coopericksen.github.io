@@ -2,28 +2,37 @@
 
 h1,p {
     height: auto;
-    padding: 0;
-    font-size: 3rem;
+    width: 100%;
+    font-size: clamp(1rem, 8vw, 3rem);
+    box-sizing: border-box;
+    margin-inline: auto;
 }
 
 section {
     height: fit-content;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-    grid-template-rows: repeat(auto-fill, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    /* grid-template-rows: repeat(auto-fill, 1fr); */
     gap: 20px;
 }
 
+@media (max-width: 400px) {
+  section {
+    grid-template-columns: 1fr;
+  }
+}
+
 section > * {
-    /* border: white 2px solid; */
+    border: white 5px groove;
     align-content: center;
     margin: 0;
 }
 
 progress {
-  height: 30px;
+  height: 20px;
   border-radius: 20px;
   width: 95%;
+  margin: 10px;
 }
 
 progress[value]::-webkit-progress-bar {
@@ -42,5 +51,5 @@ progress[value]::-webkit-progress-value {
 }
 
 label {
-    font-size: 2rem;
+  font-size: clamp(1rem, 6vw, 2rem);
 }

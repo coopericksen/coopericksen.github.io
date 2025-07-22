@@ -34,7 +34,6 @@ function updateClock() {
     document.getElementById("year").textContent = now.getFullYear();
 
     if (window.location.pathname != "/" && window.location.pathname != "/index" && window.location.pathname != "/index.html") {
-        console.log("not index");
     
         // second progress
         var progressSecondBar = document.getElementById("progress-second-bar");
@@ -47,7 +46,6 @@ function updateClock() {
         var progressMinuteBar = document.getElementById("progress-minute-bar");
         var progressMinuteLabel = document.getElementById("progress-minute-label");
         var progressMinute = ((now.getSeconds() * 1000 + now.getMilliseconds()) / 60000);
-        console.log(progressMinute);
         progressMinuteBar.value = progressMinute;
         progressMinuteLabel.textContent = String((progressMinute * 100).toFixed(2)) + "%";
 

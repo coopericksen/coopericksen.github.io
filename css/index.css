@@ -50,5 +50,10 @@ h2 {
 }
 
 #clocklink {
-    color: var(--text)
+    color: var(--text);
+    transition: color 500ms;
+}
+
+#clocklink:hover, #clocklink:focus {
+    color: var(--accent);
 }
