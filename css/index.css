@@ -1,7 +1,7 @@
 @import "./colorsheet.css";
 
 #welcome-banner {
-    font-size: 3rem;
+    font-size: clamp(1rem, 8vw, 3rem);
     position: relative;
     box-sizing: border-box;
     background-color: var(--background);
@@ -42,14 +42,16 @@
 }
 
 h2 {
-    font-size: 2.5rem;
+    margin: 1rem;
+    font-size: clamp(1rem, 6vw, 2.5rem);
     p {
-        font-size: 2.5rem;
+        font-size: inherit;
         display: inline-block;
     }
 }
 
 #clocklink {
+    font-size: clamp(0.8rem, 0.8rem,1.2rem);
     color: var(--text-main);
     transition: color 500ms;
 }
