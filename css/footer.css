@@ -1,0 +1,100 @@
+@import "./colorsheet.css";
+
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex-grow: 1;
+}
+
+footer {
+    border-radius: 1rem 1rem 0 0;
+    background-color: var(--primary);
+    color: var(--text-alt);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 2rem;
+    gap: 2rem;
+    justify-content: center;
+    text-align: center;
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    a {
+        color: var(--text-alt);
+    }
+
+    a:hover {
+        color: var(--accent);
+    }
+}
+
+@media (max-width: 650px) {
+    footer {
+        grid-template-columns: 1fr;
+    }
+}
+
+.theme-selector > fieldset {
+    border: none;
+    display: flex;
+    gap: 2rem;
+    background-color: var(--secondary);
+    padding: 1rem;
+    margin: 1rem;
+    margin-inline: auto;
+    width: fit-content;
+    border-radius: 1rem;
+    border: var(--border) 5px groove;
+
+
+    legend {
+        border-radius: inherit;
+        border: inherit;
+        border-style: groove;
+        border-bottom: none;
+        padding: 0.5rem;
+        text-align: center;
+        background-color: var(--secondary);
+        color: var(--text-alt);
+    }
+}
+
+.theme-selector > fieldset > input {
+    appearance: none;
+    width: 1.5rem;
+    height: 1.5rem;
+    outline: var(--radio-color) 3px solid;
+    border-radius: 50%;
+    outline-offset: 3px;
+}
+
+.theme-selector > fieldset > input:hover {
+    outline: var(--radio-color) 3px dashed;
+    cursor: pointer;
+}
+
+.theme-selector input:checked {
+    background-color: var(--radio-color);
+}
+
+#theme-dark {
+    --radio-color: #0A0F29;
+}
+
+#theme-light {
+    --radio-color: #DEDEDE;
+}
+
+#theme-blue {
+    --radio-color: #1039AB;
+}
+
+#theme-green {
+    --radio-color: #0D7446;
+}

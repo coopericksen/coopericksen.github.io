@@ -1,4 +1,4 @@
-@import "colorsheet.css";
+@import "./colorsheet.css";
 
 nav {
     display: grid;
@@ -6,6 +6,8 @@ nav {
     transition: grid-template-columns 500ms ease;
     justify-content: space-around;
     position: sticky;
+    top: 0;
+    z-index: 99;
     background-color: var(--background);
 
     a {
@@ -14,8 +16,8 @@ nav {
         flex-grow: 1;
         text-align: center;
         padding: 10px;
-        color: var(--text);
-        border-bottom: var(--secondary) 3px solid;
+        color: var(--text-main);
+        border-bottom: var(--border) 3px solid;
         text-decoration: none;
         transition: color 500ms;
         align-content: center;
@@ -47,11 +49,10 @@ nav {
     }
 
     .navlogo {
-        border-bottom: var(--secondary) 3px solid;
+        border-bottom: var(--border) 3px solid;
         img {
             width: clamp(10px, 5vw, 50px);
             height: auto;
-            /* inset: 0; */
         }
     }
 }

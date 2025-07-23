@@ -1,11 +1,52 @@
 /* Inter Font */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
-:root {
-    --text: #D3D3D3;
+:root { 
+    --text-main: #D3D3D3;
+    --text-alt: #222222;
     --background: #0A0F29; 
     --primary: #2F27CE;
     --secondary: #1FB6FF;
     --accent: #8A2BE2;
     --border: #FFFFFF;
+}
+
+:root:has(#theme-dark:checked) {
+    --text-main: #D3D3D3;
+    --text-alt: #222222;
+    --background: #0A0F29; 
+    --primary: #2F27CE;
+    --secondary: #1FB6FF;
+    --accent: #8A2BE2;
+    --border: #FFFFFF;
+}
+
+:root:has(#theme-light:checked) {
+    --text-main: #000000;
+    --text-alt: #D3D3D3;
+    --background: #DEDEDE; 
+    --primary: #6473C1;
+    --secondary: #787878;
+    --accent: #200861;
+    --border: #4040a0;
+}
+
+:root:has(#theme-blue:checked) {
+    --text-main: #D3D3D3;
+    --text-alt: #000000;
+    --background: #106F97; 
+    --primary: #0823AB;
+    --secondary: #F30202;
+    --accent: #CEF046;
+    --border: #4040a0;
+}
+
+:root:has(#theme-green:checked) {
+    --text-main: #64BEF2;
+    --text-alt: #000000;
+    --background: #0D7446; 
+    --primary: #D6DC27;
+    --secondary: #5B896A;
+    --accent: #DD6B13;
+    --border: #64BEF2;
 }

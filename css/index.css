@@ -1,6 +1,6 @@
-@import "colorsheet.css";
+@import "./colorsheet.css";
 
-h1 {
+#welcome-banner {
     font-size: 3rem;
     position: relative;
     box-sizing: border-box;
@@ -15,7 +15,7 @@ h1 {
         display: inline-block;
 
         span {
-            color: var(--text);
+            color: var(--text-main);
             font-size: inherit;
         }
     }
@@ -50,7 +50,7 @@ h2 {
 }
 
 #clocklink {
-    color: var(--text);
+    color: var(--text-main);
     transition: color 500ms;
 }
 

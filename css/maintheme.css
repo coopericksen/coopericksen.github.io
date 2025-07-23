@@ -1,4 +1,4 @@
-@import "colorsheet.css";
+@import "./colorsheet.css";
 
 @property --gradient-angle {
     syntax: "<angle>";
@@ -17,18 +17,20 @@
     font-size: 16px;
     font-family: "Inter", sans-serif;
     font-display: swap;
+    transition: color 500ms;
+    box-sizing: border-box;
 }
 
 body {
     background-color: var(--background);
-    color: var(--text);
+    color: var(--text-main);
 }
 
 h1,section {
     font-size: 3rem;
     height: fit-content;
-    padding: 2vh 2vw;
-    margin: 2vw;
+    padding: 3rem;
+    margin: 3rem;
     background-color: var(--background);
     border-radius: 20px;
     position: relative;
@@ -55,7 +57,7 @@ h1,section {
 
 .abutton {
     background-color: var(--primary);
-    color: var(--text);
+    color: var(--text-light);
     padding: 2vh 2vw;
     margin: 0.5vh 2vw;
     font-size: 1.2rem;

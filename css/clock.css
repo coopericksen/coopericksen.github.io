@@ -1,4 +1,4 @@
-@import "../css/colorsheet.css";
+@import "./colorsheet.css";
 
 h1,p {
     height: auto;
@@ -22,7 +22,7 @@ section {
 }
 
 section > * {
-    border: white 5px groove;
+    border: var(--border) 5px groove;
     align-content: center;
     margin: 0;
 }
@@ -35,7 +35,7 @@ progress {
 }
 
 progress[value]::-webkit-progress-bar {
-  background-color: #ededed;
+  background-color: var(--border);
   border-radius: 20px;
 }
 

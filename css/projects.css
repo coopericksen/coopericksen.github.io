@@ -1,4 +1,4 @@
-@import "colorsheet.css";
+@import "./colorsheet.css";
 
 @property --gradient-angle {
     syntax: "<angle>";

@@ -7,8 +7,10 @@
     <link rel="icon" type="image/png" href="websitefavicon.png">
     <link rel="stylesheet" href="css/maintheme.css">
     <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/footer.css">
 
     <title>About</title>
+    <script defer src="./js/theme.js"></script>
 </head>
 <body>
     <nav>
@@ -18,6 +20,29 @@
         <a href="/projects">Projects</a>
         <a href="/about">About</a>
     </nav>
-    <h1 class="glow-border">About me</h1>
+
+    <main>
+        <h1 class="glow-border">About me</h1>
+    </main>
+
+    <footer>
+        <div>
+            <h3>Link to repository</h3>
+            <a href="https://github.com/coopericksen/coopericksen.github.io" target="_blank">Here</a>
+        </div>
+        <div class="page-settings">
+        <h3>Settings</h3>
+            <form class="theme-selector" action="">
+                <fieldset>
+                    <legend>Theme</legend>
+                    <input name="theme" type="radio" id="theme-dark" checked>
+                    <input name="theme" type="radio" id="theme-light">
+                    <input name="theme" type="radio" id="theme-blue">
+                    <input name="theme" type="radio" id="theme-green">
+                </fieldset>
+            </form>
+        </div>
+    </footer>
+
 </body>
 </html>
