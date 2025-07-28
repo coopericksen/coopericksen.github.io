@@ -37,5 +37,4 @@ const fetchTheme = function() {
     });
 
     document.body.setAttribute('data-theme', activeTheme);
-    console.log(activeTheme);
 };
