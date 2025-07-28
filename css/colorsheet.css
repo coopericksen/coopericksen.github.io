@@ -9,6 +9,11 @@
     --secondary: #1FB6FF;
     --accent: #8A2BE2;
     --border: #FFFFFF;
+    
+    --button-main: var(--primary);
+    --button-secondary: var(--accent);
+    --button-text-main: var(--text-main);
+    --button-text-secondary: var(--text-main);
 }
 
 :root:has(#theme-dark:checked) {
@@ -19,16 +24,26 @@
     --secondary: #1FB6FF;
     --accent: #8A2BE2;
     --border: #FFFFFF;
+
+    --button-main: var(--primary);
+    --button-secondary: var(--accent);
+    --button-text-main: var(--text-main);
+    --button-text-secondary: var(--text-main);
 }
 
 :root:has(#theme-light:checked) {
     --text-main: #000000;
     --text-alt: #D3D3D3;
     --background: #DEDEDE; 
-    --primary: #6473C1;
+    --primary: #200861;
     --secondary: #787878;
-    --accent: #200861;
+    --accent: #6473C1;
     --border: #4040a0;
+
+    --button-main: var(--primary);
+    --button-secondary: var(--accent);
+    --button-text-main: var(--text-alt);
+    --button-text-secondary: var(--text-alt);
 }
 
 :root:has(#theme-blue:checked) {
@@ -39,14 +54,39 @@
     --secondary: #F30202;
     --accent: #CEF046;
     --border: #4040a0;
+
+    --button-main: var(--primary);
+    --button-secondary: var(--accent);
+    --button-text-main: var(--text-main);
+    --button-text-secondary: var(--text-alt);
+}
+
+:root:has(#theme-red:checked) {
+    --text-main: #FDF0D5;
+    --text-alt: #AE70AE;
+    --background: #780000; 
+    --primary: #C1121F;
+    --secondary: #003049;
+    --accent: #669BBC;
+    --border: var(--accent);
+
+    --button-main: var(--primary);
+    --button-secondary: var(--accent);
+    --button-text-main: var(--text-main);
+    --button-text-secondary: var(--text-main);
 }
 
 :root:has(#theme-green:checked) {
-    --text-main: #64BEF2;
-    --text-alt: #000000;
-    --background: #0D7446; 
-    --primary: #D6DC27;
-    --secondary: #5B896A;
-    --accent: #DD6B13;
-    --border: #64BEF2;
+    --text-main: #F2E8CF;
+    --text-alt: #003f00;
+    --background: #6A994E; 
+    --primary: #A7C957;
+    --secondary: #BC4749;
+    --accent: #386641;
+    --border: var(--accent);
+
+    --button-main: var(--primary);
+    --button-secondary: var(--accent);
+    --button-text-main: var(--text-main);
+    --button-text-secondary: var(--text-main);
 }

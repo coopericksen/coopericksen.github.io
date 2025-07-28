@@ -4,79 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="icon" type="image/png" href="../websitefavicon.png">
-    <link rel="stylesheet" href="../css/maintheme.css">
-    <link rel="stylesheet" href="../css/navbar.css">
-    <link rel="stylesheet" href="../css/footer.css">
-    <link rel="stylesheet" href="../css/clock.css">
+    <link rel="icon" type="image/png" href="/websitefavicon.png">
+    <link rel="stylesheet" href="/css/maintheme.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/clock.css">
 
     <title>Tools - Clock</title>
-    <script src="../js/clock.js"></script>
-    <script defer src="../js/theme.js"></script>
+    <script src="/js/clock.js"></script>
+    <script defer src="/js/themeinject.js"></script>
 </head>
 <body>
-    <nav>
-        <a class="navlogo" href="/"><img src="../websitelogo.png" alt="logo"></a>
-        <a class="navhome" href="/">Home</a>
-        <a href="/tools">Tools</a>
-        <a href="/projects">Projects</a>
-        <a href="/about">About</a>
-    </nav>
 
-    <section class="glow-border">
-        <h1>Current Time: <p id="time" style="font-family: monospace;">00:00:00</p></h1>
-        <h1>Current Date: <p id="date">Mon Jan 1</p></h1>
-        <h1>Current Year: <p id="year">2000</p></h1>
-        <div class="progress-container">
-            <h1>Second Progress</h1>
-            <label for="progress-second-bar" id="progress-second-label">0%</label>
-            <progress id="progress-second-bar" value="0"></progress>
-        </div>
-        <div class="progress-container">
-            <h1>Minute Progress</h1>
-            <label for="progress-minute-bar" id="progress-minute-label">0%</label>
-            <progress id="progress-minute-bar" value="0"></progress>
-        </div>
-        <div class="progress-container">
-            <h1>Hour Progress</h1>
-            <label for="progress-hour-bar" id="progress-hour-label">0%</label>
-            <progress id="progress-hour-bar" value="0"></progress>
-        </div>
-        <div class="progress-container">
-            <h1>Day Progress</h1>
-            <label for="progress-day-bar" id="progress-day-label">0%</label>
-            <progress id="progress-day-bar" value="0"></progress>
-        </div>
-        <div class="progress-container">
-            <h1>Month Progress</h1>
-            <label for="progress-month-bar" id="progress-month-label">0%</label>
-            <progress id="progress-month-bar" value="0"></progress>
-        </div>
-        <div class="progress-container">
-            <h1>Year Progress</h1>
-            <label for="progress-year-bar" id="progress-year-label">0%</label>
-            <progress id="progress-year-bar" value="0"></progress>
-        </div>
-    </section>
+    <div id="nav-placeholder"></div>
 
-    <footer>
-        <div>
-            <h3>Link to repository</h3>
-            <a href="https://github.com/coopericksen/coopericksen.github.io" target="_blank">Here</a>
+    <main>
+        <h1 class="glow-border">Clock</h1>
+        <div class="abutton-container">
+            <a class="abutton" href="javascript:history.back()" style="--text: 'Go Back';">Go Back</a>
         </div>
-        <div class="page-settings">
-        <h3>Settings</h3>
-            <form class="theme-selector" action="">
-                <fieldset>
-                    <legend>Theme</legend>
-                    <input name="theme" type="radio" id="theme-dark" checked>
-                    <input name="theme" type="radio" id="theme-light">
-                    <input name="theme" type="radio" id="theme-blue">
-                    <input name="theme" type="radio" id="theme-green">
-                </fieldset>
-            </form>
-        </div>
-    </footer>
+
+        <section class="glow-border">
+            <h1>Current Time: <p id="time" style="font-family: monospace;">00:00:00</p></h1>
+            <h1>Current Date: <p id="date">Mon Jan 1</p></h1>
+            <h1>Current Year: <p id="year">2000</p></h1>
+            <div class="progress-container">
+                <h1>Second Progress</h1>
+                <label for="progress-second-bar" id="progress-second-label">0%</label>
+                <progress id="progress-second-bar" value="0"></progress>
+            </div>
+            <div class="progress-container">
+                <h1>Minute Progress</h1>
+                <label for="progress-minute-bar" id="progress-minute-label">0%</label>
+                <progress id="progress-minute-bar" value="0"></progress>
+            </div>
+            <div class="progress-container">
+                <h1>Hour Progress</h1>
+                <label for="progress-hour-bar" id="progress-hour-label">0%</label>
+                <progress id="progress-hour-bar" value="0"></progress>
+            </div>
+            <div class="progress-container">
+                <h1>Day Progress</h1>
+                <label for="progress-day-bar" id="progress-day-label">0%</label>
+                <progress id="progress-day-bar" value="0"></progress>
+            </div>
+            <div class="progress-container">
+                <h1>Month Progress</h1>
+                <label for="progress-month-bar" id="progress-month-label">0%</label>
+                <progress id="progress-month-bar" value="0"></progress>
+            </div>
+            <div class="progress-container">
+                <h1>Year Progress</h1>
+                <label for="progress-year-bar" id="progress-year-label">0%</label>
+                <progress id="progress-year-bar" value="0"></progress>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
 
 </body>
 </html>

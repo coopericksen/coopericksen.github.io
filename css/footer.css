@@ -1,6 +1,6 @@
 @import "./colorsheet.css";
 
-html, body {
+/* html, body {
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -8,7 +8,7 @@ html, body {
 
 main {
     flex-grow: 1;
-}
+} */
 
 footer {
     border-radius: 1rem 1rem 0 0;
@@ -17,6 +17,7 @@ footer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     padding: 2rem;
+    margin-top: 10rem;
     gap: 2rem;
     justify-content: center;
     text-align: center;
@@ -95,6 +96,10 @@ footer {
     --radio-color: #1039AB;
 }
 
+#theme-red {
+    --radio-color: #780000;
+}
+
 #theme-green {
-    --radio-color: #0D7446;
+    --radio-color: #606C38;
 }

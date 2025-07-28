@@ -1,6 +1,6 @@
 @import "./colorsheet.css";
 
-h1, p {
+section h1, section p {
     height: auto;
     width: 100%;
     font-size: 3rem;
