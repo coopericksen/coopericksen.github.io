@@ -1,4 +1,4 @@
-@import "./colorsheet.css";
+@import "/css/colorsheet.css";
 
 @property --gradient-angle {
     syntax: "<angle>";
@@ -25,21 +25,26 @@ body {
     color: var(--text-main);
 }
 
-h1,section {
+.top-card, .main-section {
     font-size: 3rem;
     height: fit-content;
     padding: 3rem;
     margin: 3rem;
     background-color: var(--background);
-    border-radius: 20px;
+    border-radius: 1rem;
     position: relative;
     align-content: center;
     text-align: center;
 }
 
+.glow-border {
+    position: relative;
+}
+
 .glow-border::before, .glow-border::after {
     content: '';
     position: absolute;
+    display: block;
     bottom: -5px;
     left: -5px;
     width: calc(100% + 10px);
@@ -67,7 +72,7 @@ h1,section {
         grid-template-columns: 1fr;
     }
 
-    h1, section {
+    .top-card, .main-section {
         font-size: 2rem;
     }
 }
@@ -75,9 +80,8 @@ h1,section {
 .abutton {
     cursor: pointer;
     text-decoration: none;
-    color: var(--text-main);
-    border-radius: 20px;
-    border: var(--border) 2px solid;
+    color: var(--button-text-main);
+    border-radius: 1rem;
     padding: 1.5rem;
     margin: 0rem 2rem;
     flex-grow: 1;
@@ -86,40 +90,42 @@ h1,section {
     position: relative;
     display: inline-block;
     font-size: 1.8rem;
+    box-shadow: 0 0 10px 3px var(--primary);
 }
 
-.abutton::before, .abutton::after { 
-    content: var(--text);
-    position: absolute;
-    border-radius: inherit;
-    /* border: var(--accent) 4px solid; */
-    opacity: 0;
-    width: 0;
-    height: 0;
-    bottom: 0;
-    left: 0;
-    align-content: center;
-    overflow: hidden;
-    text-wrap: nowrap;
-}
-
-.abutton::before {
-    background-color: var(--button-secondary);
+.abutton:hover {
     color: var(--button-text-secondary);
-    transition: width 600ms ease;
+}
+
+.abutton::before, .abutton::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    z-index: -1;
+    transition: transform 500ms ease;
 }
 
 .abutton::after {
-    content: var(--text);
-    transition: height 600ms ease;
-    transition-delay: 600ms;
-    background-color: var(--button-main);
-    color: var(--button-text-main);
+    transform: scaleY(1);
+    top: 0;
+    left: 0;
+    background-color: var(--primary);
 }
 
-.abutton:hover::before, .abutton:focus::before, .abutton:hover::after, .abutton:focus::after {
-    width: 100%;
-    height: 100%;
-    opacity: 1;
-    transform: rotate(0deg);
+.abutton::before {
+    transform: scaleY(0);
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent);
+}
+
+.abutton:hover::before {
+    transform: scaleY(1);
+}
+
+.abutton:hover::after {
+    /* background-color: var(--accent); */
+    transform: scaleY(0);
 }

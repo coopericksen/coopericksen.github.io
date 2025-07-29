@@ -1,0 +1,176 @@
+@import "/css/colorsheet.css";
+
+#about-name {
+    margin-top: 1rem;
+    font-size: 4rem;
+    text-align: center;
+    color: var(--text-main);
+}
+
+#about-hr {
+    width: 80%;
+    margin: 1rem;
+    margin-inline: auto;
+    border: none;
+    border: 2px solid var(--border);
+    box-shadow: 0 0 8px 3px var(--primary);
+}
+
+#about-titles {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+#about-name, #about-hr, #about-titles, #about-whatiuse {
+    grid-column: span 2;
+}
+
+#about-p-name {
+    color: var(--primary);
+    font-size: 1.6rem;
+}
+
+.about-p {
+    font-size: 1.2rem;
+    color: var(--text-main);
+    margin-inline: auto;
+    padding: 1rem;
+    height: 100%;
+    align-content: center;
+    background-color: var(--background);
+    border-radius: 1rem;
+    line-height: 2rem;
+    width: 100%;
+}
+
+#about-image {
+    width: 100%;
+    margin-inline: auto;
+    display: block;
+    border-radius: inherit;
+}
+
+#about-image-container {
+    width: 100%;
+    margin-inline: auto;
+    background-color: var(--background);
+    border-radius: 1rem;
+}
+
+#about-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1000px;
+    margin: 2rem;
+    padding: 1rem;
+    row-gap: 0.5rem;
+    column-gap: 2rem;
+    margin-inline: auto;
+    align-items: center;
+}
+
+.about-logo {
+    height: clamp(50px, 10vw, 80px);
+    width: auto;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 0 10px 3px var(--primary);
+    position: relative;
+    z-index: 3;
+}
+
+.about-logo-link {
+    position: relative;
+    border-radius: 1rem;
+    z-index: 1;
+}
+
+.about-logo-link::before, .about-logo-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    z-index: 2;
+    transition: transform 500ms ease;
+}
+
+.about-logo-link::after {
+    transform: scaleY(1);
+    top: 0;
+    left: 0;
+    background-color: var(--primary);
+}
+
+.about-logo-link::before {
+    transform: scaleY(0);
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent);
+}
+
+.about-logo-link:hover::before {
+    transform: scaleY(1);
+}
+
+.about-logo-link:hover::after {
+    transform: scaleY(0);
+}
+
+#about-whatiuse {
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+
+    h3 {
+        font-size: 2rem;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 800px) {
+    #about-name {
+        font-size: 2.2rem;
+        margin: 1rem 0 0.2rem 0;
+    }
+
+    #about-titles {
+        font-size: 1.2rem;
+    }
+
+    #about-name, #about-hr, #about-titles, #about-whatiuse {
+        grid-column: auto;
+    }
+
+    .about-p {
+        font-size: 1rem;
+    }
+
+    #about-image {
+        width: 75%;
+    }
+
+    #about-container {
+        grid-template-columns: 1fr;
+    }
+
+    #about-whatiuse {
+        gap: 1rem;
+    }
+}
+
+#about-link {
+    font-size: inherit;
+    color: inherit;
+    transition: color 500ms;
+}
+
+#about-link:hover {
+    color: var(--accent);
+}

@@ -1,4 +1,4 @@
-@import "./colorsheet.css";
+@import "/css/colorsheet.css";
 
 section h1, section p {
     height: auto;
@@ -55,7 +55,7 @@ progress[value]::-webkit-progress-bar {
 
 progress[value]::-webkit-progress-value {
   border-radius: 20px;
-  background-image: linear-gradient(to right, var(--primary), var(--secondary), var(--accent));
+  background-image: linear-gradient(to right, var(--secondary), var(--accent), var(--primary));
 }
 
 .progress-container {

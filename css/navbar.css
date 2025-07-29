@@ -1,4 +1,4 @@
-@import "./colorsheet.css";
+@import "/css/colorsheet.css";
 
 nav {
     display: grid;
@@ -15,7 +15,7 @@ nav {
         position: relative;
         flex-grow: 1;
         text-align: center;
-        padding: 10px;
+        padding: 1rem;
         color: var(--text-main);
         border-bottom: var(--border) 3px solid;
         text-decoration: none;

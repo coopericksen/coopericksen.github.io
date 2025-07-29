@@ -1,4 +1,4 @@
-@import "./colorsheet.css";
+@import "/css/colorsheet.css";
 
 /* html, body {
     height: 100%;
@@ -51,14 +51,12 @@ footer {
     margin-inline: auto;
     width: fit-content;
     border-radius: 1rem;
-    border: var(--border) 5px groove;
+    box-shadow: 0 0 8px 3px var(--border);
 
 
     legend {
         border-radius: inherit;
-        border: inherit;
-        border-style: groove;
-        border-bottom: none;
+        box-shadow: inherit;
         padding: 0.5rem;
         text-align: center;
         background-color: var(--secondary);
