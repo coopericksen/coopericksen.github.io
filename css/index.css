@@ -29,15 +29,15 @@
         position: absolute;
         left: 0;
         bottom: 0;
-        width: 0%;
-        height: 0%;
+        width: 100%;
+        height: 2px;
         background-color: var(--accent);
-        transition: width 500ms ease;
+        transform: scaleX(0);
+        transition: transform 500ms ease;
     }
 
     a:hover::before, a:focus::before{
-        height: 2px;
-        width: 96%;
+        transform: scaleX(1);
     }
 }
 
@@ -51,7 +51,7 @@ h2 {
 }
 
 #clocklink {
-    font-size: clamp(0.8rem, 0.8rem,1.2rem);
+    font-size: clamp(0.6rem, 4vw, 1.2rem);
     color: var(--text-main);
     transition: color 500ms;
 }

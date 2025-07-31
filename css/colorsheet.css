@@ -63,7 +63,7 @@
 
 :root:has(#theme-red:checked) {
     --text-main: #FDF0D5;
-    --text-alt: #AE70AE;
+    --text-alt: #FFFFFF;
     --background: #780000; 
     --primary: #C1121F;
     --secondary: #003049;

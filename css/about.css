@@ -108,14 +108,14 @@
 }
 
 .about-logo-link::after {
-    transform: scaleY(0);
+    transform: scaleX(0) scaleY(0);
     bottom: 0;
     left: 0;
     background-color: var(--accent);
 }
 
 .about-logo-link:hover::after {
-    transform: scaleY(1);
+    transform: scaleX(1) scaleY(1);
 }
 
 #about-whatiuse {
