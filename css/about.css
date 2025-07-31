@@ -76,8 +76,13 @@
     border-radius: 1rem;
     padding: 1rem;
     box-shadow: 0 0 10px 3px var(--primary);
+    transition: box-shadow 500ms;
     position: relative;
     z-index: 3;
+}
+
+.about-logo:hover {
+    box-shadow: 0 0 10px 3px var(--accent);
 }
 
 .about-logo-link {
@@ -92,30 +97,25 @@
     width: 100%;
     height: 100%;
     border-radius: inherit;
-    z-index: 2;
     transition: transform 500ms ease;
 }
 
-.about-logo-link::after {
-    transform: scaleY(1);
+.about-logo-link::before {
     top: 0;
     left: 0;
     background-color: var(--primary);
+    z-index: -1;
 }
 
-.about-logo-link::before {
+.about-logo-link::after {
     transform: scaleY(0);
     bottom: 0;
     left: 0;
     background-color: var(--accent);
 }
 
-.about-logo-link:hover::before {
-    transform: scaleY(1);
-}
-
 .about-logo-link:hover::after {
-    transform: scaleY(0);
+    transform: scaleY(1);
 }
 
 #about-whatiuse {

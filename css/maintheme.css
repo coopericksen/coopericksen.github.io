@@ -91,10 +91,12 @@ body {
     display: inline-block;
     font-size: 1.8rem;
     box-shadow: 0 0 10px 3px var(--primary);
+    transition: box-shadow 500ms;
 }
 
 .abutton:hover {
     color: var(--button-text-secondary);
+    box-shadow: 0 0 10px 3px var(--accent);
 }
 
 .abutton::before, .abutton::after {
@@ -107,25 +109,19 @@ body {
     transition: transform 500ms ease;
 }
 
-.abutton::after {
-    transform: scaleY(1);
+.abutton::before {
     top: 0;
     left: 0;
     background-color: var(--primary);
 }
 
-.abutton::before {
+.abutton::after {
     transform: scaleY(0);
     bottom: 0;
     left: 0;
     background-color: var(--accent);
 }
 
-.abutton:hover::before {
-    transform: scaleY(1);
-}
-
 .abutton:hover::after {
-    /* background-color: var(--accent); */
-    transform: scaleY(0);
+    transform: scaleY(1);
 }
