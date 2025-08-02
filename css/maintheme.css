@@ -37,6 +37,12 @@ body {
     text-align: center;
 }
 
+@media (max-width: 750px) {
+    .main-section {
+        padding: 1rem;
+    }
+}
+
 .glow-border {
     position: relative;
 }
@@ -59,7 +65,7 @@ body {
     filter: blur(0.5rem);
 }
 
-.abutton-container {
+.grid-abutton-container {
     display: grid;
     justify-content: space-evenly;
     gap: 2rem;
@@ -68,7 +74,7 @@ body {
 }
 
 @media (max-width: 600px) {
-    .abutton-container {
+    .grid-abutton-container {
         grid-template-columns: 1fr;
     }
 
@@ -77,29 +83,38 @@ body {
     }
 }
 
-.abutton {
+.grid-abutton, .abutton{
     cursor: pointer;
     text-decoration: none;
     color: var(--button-text-main);
     border-radius: 1rem;
-    padding: 1.5rem;
     margin: 0rem 2rem;
-    flex-grow: 1;
     text-align: center;
-    align-content: center;
     position: relative;
-    display: inline-block;
-    font-size: 1.8rem;
-    box-shadow: 0 0 10px 3px var(--primary);
+    box-shadow: 0 0 10px 3px var(--button-main);
     transition: box-shadow 500ms;
 }
 
-.abutton:hover {
-    color: var(--button-text-secondary);
-    box-shadow: 0 0 10px 3px var(--accent);
+.grid-abutton {
+    font-size: 1.8rem;
+    padding: 1.5rem;
+
 }
 
-.abutton::before, .abutton::after {
+.abutton {
+    font-size: 1.5rem;
+    padding: 1rem;
+    display: block;
+    margin-inline: auto;
+    max-width: max-content;
+}
+
+.grid-abutton:hover, .abutton:hover{
+    color: var(--button-text-secondary);
+    box-shadow: 0 0 10px 3px var(--button-secondary);
+}
+
+.grid-abutton::before, .abutton::before, .grid-abutton::after, .abutton::after {
     content: '';
     position: absolute;
     width: 100%;
@@ -109,19 +124,19 @@ body {
     transition: transform 500ms ease;
 }
 
-.abutton::before {
+.grid-abutton::before, .abutton:before {
     top: 0;
     left: 0;
-    background-color: var(--primary);
+    background-color: var(--button-main);
 }
 
-.abutton::after {
+.grid-abutton::after, .abutton::after {
     transform: scaleX(0) scaleY(0);
     bottom: 0;
     left: 0;
-    background-color: var(--accent);
+    background-color: var(--button-secondary);
 }
 
-.abutton:hover::after {
+.grid-abutton:hover::after, .abutton:hover::after {
     transform: scaleX(1) scaleY(1);
 }

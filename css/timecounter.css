@@ -1,0 +1,175 @@
+.timecounter-currenttime {
+    h1 {
+        font-size: 2.5rem;
+        display: inline-block;
+        border: 2px white solid;
+        border-radius: 1rem;
+        margin: 1rem 0.5rem;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    p {
+        font-size: 2rem;
+        text-align: center;
+    }
+}
+
+
+#timecounter-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 2rem;
+    margin: 1rem;
+}
+
+
+.timecounter-counter {
+    width: 100%;
+    margin-inline: auto;
+    border-radius: 1rem;
+    box-shadow: 0 0 10px 3px var(--primary);
+    background-color: var(--primary);
+    position: relative;
+    transition: color 500ms, background-color 500ms, box-shadow 500ms, transform 500ms;
+}
+
+
+.timecounter-counter:hover {
+    background-color: var(--button-secondary);
+    box-shadow: 0 0 10px 3px var(--button-secondary);
+    button, input, h1 {
+        color: var(--button-text-secondary)
+    }
+}
+
+.timecounter-shrink {
+    transform: scale(0);
+}
+
+.timecounter-counter-deletebutton {
+    position: absolute;
+    margin: 0.3rem;
+    text-align: center;
+    width: 2rem;
+    height: 2rem;
+    top: 0;
+    right: 0;
+    border-radius: 1rem;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    color: var(--button-text-main)
+}
+
+.timecounter-counter-label {
+    text-align: center;
+    margin: 1rem;
+    padding: 0.5rem;
+    margin-inline: 3rem;
+    font-size: 2rem;
+    color: var(--button-text-main);
+    border-radius: 1rem;
+    border: 2px solid var(--border);
+}
+
+.timecounter-counter-input {
+    border-radius: 1rem;
+    background-color: transparent;
+    border: 2px solid var(--border);
+    color: var(--button-text-main);
+    margin: 0 1rem;
+    padding: 0.3rem;
+}
+
+.timecounter-counter-timer {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 1rem 2rem;
+    padding: 1rem;
+    border: 2px solid var(--border);
+    border-radius: 1rem;
+}
+
+.timercounter-counter-timerlabel {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 1rem 3rem;
+    border-radius: 1rem;
+    border: 2px solid var(--border);
+}
+
+@media (max-width: 700px) {
+    .timecounter-currenttime {
+        h1 {
+            font-size: 1.2rem;
+        }
+
+        p {
+            font-size: 1rem;
+        }
+    }
+
+    #timecounter-container {
+        grid-template-columns: 1fr;
+    }
+
+    .timecounter-counter-timerlabel {
+        font-size: 1rem;    
+    }
+
+    .timecounter-counter-timer {
+        font-size: 0.8rem;
+    }
+}
+
+#timecounter-newbutton {
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--button-text-main);
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1rem 2rem;
+    margin-inline: auto;
+    text-align: center;
+    position: relative;
+    display: block;
+    font-size: 1.5rem;
+    box-shadow: 0 0 10px 3px var(--primary);
+    transition: box-shadow 500ms;
+    background-color: transparent;
+    border: none;
+    z-index: 1;
+}
+
+#timecounter-newbutton:hover {
+    color: var(--button-text-secondary);
+    box-shadow: 0 0 10px 3px var(--accent);
+}
+
+#timecounter-newbutton::before, #timecounter-newbutton::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    z-index: -1;
+    transition: transform 500ms ease;
+}
+
+#timecounter-newbutton::before {
+    top: 0;
+    left: 0;
+    background-color: var(--primary);
+}
+
+#timecounter-newbutton::after {
+    transform: scaleX(0) scaleY(0);
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent);
+}
+
+#timecounter-newbutton:hover::after {
+    transform: scaleX(1) scaleY(1);
+}

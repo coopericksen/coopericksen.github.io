@@ -75,14 +75,14 @@
     width: auto;
     border-radius: 1rem;
     padding: 1rem;
-    box-shadow: 0 0 10px 3px var(--primary);
+    box-shadow: 0 0 10px 3px var(--button-main);
     transition: box-shadow 500ms;
     position: relative;
     z-index: 3;
 }
 
 .about-logo:hover {
-    box-shadow: 0 0 10px 3px var(--accent);
+    box-shadow: 0 0 10px 3px var(--button-secondary);
 }
 
 .about-logo-link {
@@ -103,7 +103,7 @@
 .about-logo-link::before {
     top: 0;
     left: 0;
-    background-color: var(--primary);
+    background-color: var(--button-main);
     z-index: -1;
 }
 
@@ -111,7 +111,7 @@
     transform: scaleX(0) scaleY(0);
     bottom: 0;
     left: 0;
-    background-color: var(--accent);
+    background-color: var(--button-secondary);
 }
 
 .about-logo-link:hover::after {

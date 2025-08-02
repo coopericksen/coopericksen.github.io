@@ -6,12 +6,13 @@ function updateClock() {
 
     const now = new Date();
 
-    var currentTime = String(now).slice(16,24) + ":" + String(now.getMilliseconds());
+    var currentTime = String(now).slice(16,24) + ":";
     if (now.getMilliseconds() < 10) {
         currentTime += "00";
     } else if (now.getMilliseconds() < 100) {
         currentTime += "0";
     };
+    currentTime += String(now.getMilliseconds());
 
     var currentDay = now.getDate();
     var currentMonth = now.getMonth() + 1;

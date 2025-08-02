@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="/websitefavicon.png">
+    <link rel="stylesheet" href="/css/maintheme.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/timecounter.css">
+
+    <title>Tools - Time Counter</title>
+
+    <script defer src="/js/timecounter.js"></script>
+    <script defer src="/js/themeinject.js"></script>
+</head>
+<body>
+
+    <div id="nav-placeholder"></div>
+
+    <main>
+        <h1 class="top-card glow-border">Time Counter</h1>
+        <a class="abutton" href="javascript:history.back()">Go Back</a>
+
+        <section class="main-section glow-border">
+            <div class="timecounter-currenttime">
+                <h1>Current Time: <p id="time" style="font-family: monospace;">00:00:00</p></h1>
+                <h1>Current Date: <p id="date">Mon Jan 1</p></h1>
+                <h1>Current Year: <p id="year">2000</p></h1>
+            </div>
+            <button id="timecounter-newbutton" onclick="createCounter('Click to Rename')">New Counter</button>
+            <div id="timecounter-container"></div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+</body>
+</html>
