@@ -31,16 +31,7 @@
     box-shadow: 0 0 10px 3px var(--primary);
     background-color: var(--primary);
     position: relative;
-    transition: color 500ms, background-color 500ms, box-shadow 500ms, transform 500ms;
-}
-
-
-.timecounter-counter:hover {
-    background-color: var(--button-secondary);
-    box-shadow: 0 0 10px 3px var(--button-secondary);
-    button, input, h1 {
-        color: var(--button-text-secondary)
-    }
+    transition: transform 500ms;
 }
 
 .timecounter-shrink {
@@ -70,13 +61,12 @@
     font-size: 2rem;
     color: var(--button-text-main);
     border-radius: 1rem;
-    border: 2px solid var(--border);
 }
 
 .timecounter-counter-input {
     border-radius: 1rem;
+    border: solid;
     background-color: transparent;
-    border: 2px solid var(--border);
     color: var(--button-text-main);
     margin: 0 1rem;
     padding: 0.3rem;
@@ -87,8 +77,8 @@
     font-size: 1.5rem;
     margin: 1rem 2rem;
     padding: 1rem;
-    border: 2px solid var(--border);
     border-radius: 1rem;
+    color: var(--button-text-main);
 }
 
 .timercounter-counter-timerlabel {
@@ -96,7 +86,7 @@
     font-size: 1.5rem;
     margin: 1rem 3rem;
     border-radius: 1rem;
-    border: 2px solid var(--border);
+    color: var(--button-text-main);
 }
 
 @media (max-width: 700px) {

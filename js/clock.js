@@ -1,4 +1,4 @@
-const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const daysInMonth = (year, month) => new Date(year, month, 0).getDate();
 const daysInYear = year => (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)) ? 366 : 365;
 
@@ -31,7 +31,7 @@ function updateClock() {
     // basic clocks
 
     document.getElementById("time").textContent = currentTime;
-    document.getElementById("date").textContent = daysOfWeek[now.getDay() - 1] + ", " + String(currentMonth) + "-" + String(currentDay);
+    document.getElementById("date").textContent = daysOfWeek[now.getDay()] + ", " + String(currentMonth) + "-" + String(currentDay);
     document.getElementById("year").textContent = now.getFullYear();
 
     if (window.location.pathname != "/" && window.location.pathname != "/index" && window.location.pathname != "/index.html") {

@@ -1,4 +1,4 @@
-const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const daysInMonth = (year, month) => new Date(year, month, 0).getDate();
 const daysInYear = year => (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)) ? 366 : 365;
 
@@ -14,6 +14,8 @@ var Time = {
     time: 0,
     now: 0,
 }
+
+var localTimeCounters = [];
 
 function updateClock() {
 
@@ -38,12 +40,8 @@ function updateClock() {
 
     // basic clocks
     document.getElementById("time").textContent = `${Time.hour}:${Time.minute}:${Time.second}:${Time.millisecond}`;
-    document.getElementById("date").textContent = daysOfWeek[now.getDay() - 1] + ", " + String(Time.month) + "-" + String(Time.day);
+    document.getElementById("date").textContent = daysOfWeek[now.getDay()] + ", " + String(Time.month) + "-" + String(Time.day);
     document.getElementById("year").textContent = Time.year;
-
-    timeCounters.forEach((counter) => {
-        
-    });
 
     setTimeout(updateClock, 10);
 }
@@ -52,17 +50,26 @@ document.addEventListener("DOMContentLoaded", (e) => {
     updateClock();
     globalThis.counterContainer = document.getElementById("timecounter-container");
 
-    createCounter("First Git Commit", "2025-07-09", "08:18"); // 2025-7-9T08:18:07
-    createCounter("2026 HS Graduation", "2026-06-05", "17:00"); // 2026-6-5T17:00:00
-    createCounter("Birthday", "2008-02-13", "05:00");
-    createCounter("Next Birthday", "2026-02-13", "05:00");
+    // fetch counters
+    var storedCounters = JSON.parse(localStorage.getItem("timeCounters"));
+    if (storedCounters === null || storedCounters.length === 0) {
+        createCounter("First Git Commit", 0, "2025-07-09", "08:18"); // 2025-7-9T08:18:07
+        createCounter("2026 HS Graduation", 1, "2026-06-05", "17:00"); // 2026-6-5T17:00:00
+        createCounter("Birthday", 2, "2008-02-13", "05:00");
+        createCounter("Next Birthday", 3, "2026-02-13", "05:00");
+    } else {
+        storedCounters.forEach((timeCounter) => {
+            createCounter(timeCounter[0], storedCounters.indexOf(timeCounter), timeCounter[1], timeCounter[2]);
+        });
+    }
 });
 
 var timeCounters = [];
 
 class Counter {
-    constructor(labelText, placeholderDate=0, placeholderTime=0) {
+    constructor(labelText, localStorgeIndex, placeholderDate=0, placeholderTime=0) {
         this.counter = document.createElement("div");
+        this.localStorageIndex = localStorgeIndex;
 
         this.deleteButton = document.createElement("button");
         this.deleteButton.classList.add("timecounter-counter-deletebutton");
@@ -75,12 +82,14 @@ class Counter {
         this.label.classList.add("timecounter-counter-label")
         this.label.setAttribute("contenteditable", "true");
 
+        // compare inital date if unset
         if (placeholderDate === 0) {
             this.date = `${Time.year}-${Time.month}-${Time.day}`;
         } else {
             this.date = placeholderDate;
         }
 
+        // compare inital time if unset
         if (placeholderTime === 0) {
             this.time = `${Time.hour}:${Time.minute}`;
         } else {
@@ -135,10 +144,6 @@ function updateCounters() {
         dayDiff -= Math.floor(yearDiff * 365.25);
         let monthDiff = 0;
 
-        // console.log(currentDate);
-        // console.log(compareDate);
-        // console.log(Time.millisecond);
-
         counter.timerLabel.textContent = (counter.past === true) ? "Time Since" : "Time Until";
         counter.timer.textContent = `${yearDiff} Years, ${monthDiff} Months, ${dayDiff} Days, ${hourDiff} Hours, ${minuteDiff} Minutes, ${secondDiff} Seconds`;  
     });
@@ -146,12 +151,21 @@ function updateCounters() {
     setTimeout(updateCounters, 10);
 }
 
-function createCounter(textLabel, placeholderDate, placeholderTime) {
-    let newCounter = new Counter(textLabel, placeholderDate, placeholderTime);
+function createCounter(textLabel, localStorageIndex, placeholderDate, placeholderTime) {
+    let newCounter = new Counter(textLabel, localStorageIndex, placeholderDate, placeholderTime);
     timeCounters.push(newCounter);
     counterContainer.appendChild(newCounter.counter);
+
+    // x button
     newCounter.deleteButton.onclick = function () {
         newCounter.counter.classList.add("timecounter-shrink");
+        localTimeCounters.splice(newCounter.localStorageIndex, 1);
+        localStorage.setItem("timeCounters", JSON.stringify(localTimeCounters));
+        timeCounters.forEach((counter) => {
+            if (counter.localStorageIndex > newCounter.localStorageIndex) {
+                counter.localStorageIndex -= 1;
+            }
+        })
         setTimeout(() => {
             counterContainer.removeChild(newCounter.counter);
             timeCounters.splice(newCounter.index, 1);
@@ -159,10 +173,7 @@ function createCounter(textLabel, placeholderDate, placeholderTime) {
         }, 1000);
     };
 
-    newCounter.label.onchange = function () {
-        newCounter.labelText = newCounter.label.textContent;
-    }
-
+    // select all text on click
     newCounter.label.onclick = function () {
         const selection = window.getSelection();
         const range = document.createRange();
@@ -171,6 +182,38 @@ function createCounter(textLabel, placeholderDate, placeholderTime) {
         selection.addRange(range);
     }
 
-    updateCounters();
+    // update local storage on label unfocus
+    newCounter.label.addEventListener('blur', (e) => {
+        newCounter.labelText = newCounter.label.textContent;
+        localTimeCounters[newCounter.localStorageIndex][0] = newCounter.labelText;
+        localStorage.setItem("timeCounters", JSON.stringify(localTimeCounters))
+        console.log(localTimeCounters)
+    });
 
+    // unfocus/submit label
+    newCounter.label.addEventListener('keydown', (e) => {
+        if (e.key === "Enter") {
+            e.target.blur();
+        }
+    });
+
+    // update local storage on date input
+    newCounter.inputDate.addEventListener("input", (e) => {
+        localTimeCounters[newCounter.localStorageIndex][1] = newCounter.inputDate.value;
+        console.log(newCounter.inputDate.value);
+        localStorage.setItem("timeCounters", JSON.stringify(localTimeCounters))
+    });
+
+    // update local storage on time input
+    newCounter.inputTime.addEventListener("input", (e) => {
+        localTimeCounters[newCounter.localStorageIndex][2] = newCounter.inputTime.value;
+        console.log(newCounter.inputTime.value);
+        localStorage.setItem("timeCounters", JSON.stringify(localTimeCounters))
+    });
+
+    // store in local storage
+    localTimeCounters.push([newCounter.labelText, newCounter.date, newCounter.time]);
+    localStorage.setItem("timeCounters", JSON.stringify(localTimeCounters));
+
+    updateCounters();
 };
