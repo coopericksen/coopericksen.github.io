@@ -53,8 +53,8 @@ document.addEventListener("DOMContentLoaded", (e) => {
     // fetch counters
     var storedCounters = JSON.parse(localStorage.getItem("timeCounters"));
     if (storedCounters === null || storedCounters.length === 0) {
-        createCounter("First Git Commit", 0, "2025-07-09", "08:18"); // 2025-7-9T08:18:07
-        createCounter("2026 HS Graduation", 1, "2026-06-05", "17:00"); // 2026-6-5T17:00:00
+        createCounter("First Git Commit", 0, "2025-07-09", "08:18");
+        createCounter("2026 HS Graduation", 1, "2026-06-05", "17:00");
         createCounter("Birthday", 2, "2008-02-13", "05:00");
         createCounter("Next Birthday", 3, "2026-02-13", "05:00");
     } else {
@@ -187,7 +187,6 @@ function createCounter(textLabel, localStorageIndex, placeholderDate, placeholde
         newCounter.labelText = newCounter.label.textContent;
         localTimeCounters[newCounter.localStorageIndex][0] = newCounter.labelText;
         localStorage.setItem("timeCounters", JSON.stringify(localTimeCounters))
-        console.log(localTimeCounters)
     });
 
     // unfocus/submit label
@@ -200,14 +199,12 @@ function createCounter(textLabel, localStorageIndex, placeholderDate, placeholde
     // update local storage on date input
     newCounter.inputDate.addEventListener("input", (e) => {
         localTimeCounters[newCounter.localStorageIndex][1] = newCounter.inputDate.value;
-        console.log(newCounter.inputDate.value);
         localStorage.setItem("timeCounters", JSON.stringify(localTimeCounters))
     });
 
     // update local storage on time input
     newCounter.inputTime.addEventListener("input", (e) => {
         localTimeCounters[newCounter.localStorageIndex][2] = newCounter.inputTime.value;
-        console.log(newCounter.inputTime.value);
         localStorage.setItem("timeCounters", JSON.stringify(localTimeCounters))
     });
 
