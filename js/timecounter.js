@@ -111,7 +111,7 @@ class Counter {
         this.past = (Date.now() > new Date(`${this.date}T${this.time}`));
         this.timerLabel = document.createElement("h1");
         this.timerLabel.textContent = (this.past === true) ? "Time Since" : "Time Until";
-        this.timerLabel.classList.add("timercounter-counter-timerlabel");
+        this.timerLabel.classList.add("timecounter-counter-timerlabel");
 
         this.counter.appendChild(this.timerLabel);
         this.counter.appendChild(this.label);

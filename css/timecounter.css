@@ -70,6 +70,7 @@
     color: var(--button-text-main);
     margin: 0 1rem;
     padding: 0.3rem;
+    font-size: 1rem;
 }
 
 .timecounter-counter-timer {
@@ -81,9 +82,9 @@
     color: var(--button-text-main);
 }
 
-.timercounter-counter-timerlabel {
+.timecounter-counter-timerlabel {
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin: 1rem 3rem;
     border-radius: 1rem;
     color: var(--button-text-main);
@@ -94,7 +95,6 @@
         h1 {
             font-size: 1.2rem;
         }
-
         p {
             font-size: 1rem;
         }
@@ -104,12 +104,21 @@
         grid-template-columns: 1fr;
     }
 
+    .timecounter-counter-label {
+        font-size: 1rem;
+    }
+
     .timecounter-counter-timerlabel {
-        font-size: 1rem;    
+        font-size: 0.8rem;    
     }
 
     .timecounter-counter-timer {
         font-size: 0.8rem;
+    }
+
+    .timecounter-counter-input {
+        font-size: 0.7rem;
+        padding: 0.1rem;
     }
 }
 
