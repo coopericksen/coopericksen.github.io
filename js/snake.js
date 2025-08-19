@@ -12,7 +12,11 @@ const cell_width = canvas.width / game_rows;
 const cell_height = canvas.height / game_cols;
 
 let game_over = false;
+let paused = false;
 let score = 0;
+
+let lastUpdateTime = 0;
+const snakeSpeed = 100;
 
 class Snake {
     constructor(startx, starty) {
@@ -34,13 +38,8 @@ class Snake {
             this.vy = 0;
         }
 
-        if (!game_over) {
-            this.x += this.vx;
-            this.y += this.vy;
-        }
-
-
-        this.render();
+        this.x += this.vx;
+        this.y += this.vy;
 
         // crashed into self
         this.body.forEach((part) => {
@@ -48,6 +47,8 @@ class Snake {
                 game_over = true;
             }
         });
+
+        this.render();
 
         // body chases head
         if (!game_over) {
@@ -97,10 +98,10 @@ class Snake {
         context.fill();
 
         // render body
-        this.body.forEach((part) => {
-            context.fillStyle = (this.body.indexOf(part) % 2 == 0) ? this.color_body1 : this.color_body2;
-            context.fillRect(part[0] * cell_width, part[1] * cell_height, cell_width, cell_height);
-        });
+        for (let i = 0; i < this.body.length; i++) {
+            context.fillStyle = (i % 2 == 0) ? this.color_body1 : this.color_body2;
+            context.fillRect(this.body[i][0] * cell_width, this.body[i][1] * cell_height, cell_width, cell_height);
+        };
     }
 }
 
@@ -114,8 +115,12 @@ class Food {
     }
 
     move() {
-        this.x = Math.floor(Math.random() * game_rows);
-        this.y = Math.floor(Math.random() * game_cols);
+        let valid = false;
+        while (!valid) {
+            this.x = Math.floor(Math.random() * game_rows);
+            this.y = Math.floor(Math.random() * game_cols);
+            valid = !snake.body.some(part => part[0] === this.x && part[1] === this.y);
+        }
     }
 
     render() {
@@ -136,14 +141,13 @@ function updateCanvas() {
     context.fillRect(0, 0, game_width, game_height);
 
     if (game_over) {
-
         context.fillStyle = "#fff";
         context.textAlign = "center";
-        context.font = "80px Inter";
-        context.fillText("Game Over", canvas.width/2, canvas.height/2);
+        context.font = "50px monospace";
+        context.fillText("GAME OVER", canvas.width/2, canvas.height/2);
 
-        context.font = "30px Inter";
-        context.fillText("Press R to reset.", canvas.width/2, canvas.height/2 + 50);
+        context.font = "20px monospace";
+        context.fillText("Press 'r' to reset.", canvas.width/2, canvas.height/2 + 50);
 
         snake.vx = 0;
         snake.vy = 0;
@@ -154,15 +158,18 @@ function updateCanvas() {
         if (snake.vx == 0 && snake.vy == 0) {
             context.fillStyle = "#fff";
             context.textAlign = "center";
-            context.font = "25px Inter";
-            context.fillText(`WASD or Arrow Keys`, canvas.width/2, canvas.width/2 - 50);
+            context.font = "25px monospace";
+            context.fillText(`WASD or Arrow Keys`, canvas.width/2, canvas.width/2 - 70);
+            context.font = "20px monospace";
+            context.fillText("Press 'p' to pause", canvas.width/2, canvas.height/2 - 40);
         }
     }
 
     context.fillStyle = "#fff";
     context.textAlign = "center";
-    context.font = "50px Inter";
+    context.font = "50px monospace";
     context.fillText(`Score: ${score}`, canvas.width/2, 50);
+
 };
 
 document.addEventListener('keydown', (e) => {
@@ -176,6 +183,11 @@ document.addEventListener('keydown', (e) => {
             snake.body.pop();
         }
         game_over = false;
+    }
+
+    if (e.code == "KeyP") {
+        paused = !paused;
+        renderedPause = false;
     }
 
     if (e.code == "ArrowUp" || e.code == "KeyW") {
@@ -205,4 +217,30 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-setInterval(updateCanvas, 100);
+let renderedPause = false;
+
+function gameLoop(timestamp) {
+    if (paused) {
+        requestAnimationFrame(gameLoop);
+        if (!renderedPause) {
+            context.fillStyle = "#fff";
+            context.font = "30px monospace";
+            context.fillText("PAUSED", canvas.width/2, canvas.height/2);
+            context.font = "20px monospace";
+            context.fillText("Press p to unpause.", canvas.width/2, canvas.height/2 + 30);
+            renderedPause = true;
+        }
+        return;
+    }
+
+    if (!lastUpdateTime) lastUpdateTime = timestamp;
+    const delta = timestamp - lastUpdateTime;
+
+    if (delta > snakeSpeed) {
+        updateCanvas();
+        lastUpdateTime = timestamp;
+    }
+    requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);
