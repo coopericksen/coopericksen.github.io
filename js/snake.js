@@ -30,6 +30,7 @@ class Snake {
         this.vx = 0;
         this.vy = 0;
         this.body = [];
+        this.ready = true;
     }
 
     update() {
@@ -40,6 +41,7 @@ class Snake {
 
         this.x += this.vx;
         this.y += this.vy;
+        this.ready = true;
 
         // crashed into self
         this.body.forEach((part) => {
@@ -190,30 +192,25 @@ document.addEventListener('keydown', (e) => {
         renderedPause = false;
     }
 
-    if (e.code == "ArrowUp" || e.code == "KeyW") {
-        if (snake.vy != 1) {
+    if (snake.ready) {
+        snake.ready = false;
+        if (e.code == "ArrowUp" || e.code == "KeyW") {
             snake.vx = 0;
             snake.vy = -1;
-        }
-        e.preventDefault();
-    } else if (e.code == "ArrowDown" || e.code == "KeyS") {
-        if (snake.vy != -1) {
+            e.preventDefault();
+        } else if (e.code == "ArrowDown" || e.code == "KeyS") {
             snake.vx = 0;
             snake.vy = 1;
-        }
-        e.preventDefault();
-    } else if (e.code == "ArrowLeft" || e.code == "KeyA") {
-        if (snake.vx != 1) {
+            e.preventDefault();
+        } else if (e.code == "ArrowLeft" || e.code == "KeyA") {
             snake.vx = -1;
             snake.vy = 0;
-        }
-        e.preventDefault();
-    } else if (e.code == "ArrowRight" || e.code == "KeyD") {
-        if (snake.vx != -1) {
+            e.preventDefault();
+        } else if (e.code == "ArrowRight" || e.code == "KeyD") {
             snake.vx = 1;
             snake.vy = 0;
+            e.preventDefault();
         }
-        e.preventDefault();
     }
 });
 
