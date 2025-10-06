@@ -191,25 +191,32 @@ document.addEventListener('keydown', (e) => {
         paused = !paused;
         renderedPause = false;
     }
+    if (e.code == "ArrowUp" || e.code == "KeyW" || e.code == "ArrowDown" || e.code == "KeyS" || e.code == "ArrowLeft" || e.code == "KeyA" || e.code == "ArrowRight" || e.code == "KeyD") {
+        e.preventDefault();
+    }
 
     if (snake.ready) {
         snake.ready = false;
         if (e.code == "ArrowUp" || e.code == "KeyW") {
-            snake.vx = 0;
-            snake.vy = -1;
-            e.preventDefault();
+            if (snake.vy == 0) {
+                snake.vx = 0;
+                snake.vy = -1;
+            }
         } else if (e.code == "ArrowDown" || e.code == "KeyS") {
-            snake.vx = 0;
-            snake.vy = 1;
-            e.preventDefault();
+            if (snake.vy == 0) {
+                snake.vx = 0;
+                snake.vy = 1;
+            }
         } else if (e.code == "ArrowLeft" || e.code == "KeyA") {
-            snake.vx = -1;
-            snake.vy = 0;
-            e.preventDefault();
+            if (snake.vx == 0) {
+                snake.vx = -1;
+                snake.vy = 0;
+            }
         } else if (e.code == "ArrowRight" || e.code == "KeyD") {
-            snake.vx = 1;
-            snake.vy = 0;
-            e.preventDefault();
+            if (snake.vx == 0) {
+                snake.vx = 1;
+                snake.vy = 0;
+            }
         }
     }
 });
