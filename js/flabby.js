@@ -9,6 +9,14 @@ canvas.height = game_height;
 const gravity = -0.5;
 const pipe_gap = (game_width + 50)/3;
 let score = 0;
+let topscores = JSON.parse(localStorage.getItem("flabby-topscores"));
+if (topscores == null) {
+    topscores = [0, 0, 0];
+    localStorage.setItem("flabby-topscores", JSON.stringify(topscores));
+}
+
+console.log(topscores);
+
 
 class Flabby {
     constructor(x, y) {
@@ -41,7 +49,7 @@ class Flabby {
         context.stroke();
 
         // beak
-        context.fillStyle = "#ffaa00";
+        context.fillStyle = "#aa8800";
 
         context.beginPath();
         context.moveTo(this.x + this.width/2, this.y-this.height/4);
@@ -50,7 +58,7 @@ class Flabby {
         context.closePath();
 
         context.fill();
-        context.stroke();
+        // context.stroke();
     }
 
     update() {
@@ -59,14 +67,12 @@ class Flabby {
         if (this.y > game_height) {
             this.y = game_height - this.height/2;
             this.dead = true;
-            console.log("floor")
             paused = true;
         }
         if (this.y < 0) {
             this.y = 0 + this.height/2;
             this.dead = true;
             paused = true;
-            console.log("ceil")
         }
 
         this.yv -= gravity;
@@ -113,6 +119,7 @@ class Pipe {
 
     sety() {
         this.y = game_height/2 + (Math.random() > 0.5 ? -1 : 1) * (Math.random() * 200);
+        this.gap = Math.random() * 80 + 60;
     }
 
     render() {
@@ -184,18 +191,37 @@ document.addEventListener('keydown', (e) => {
 
 });
 
+function checkTopScores() {
+    topscores.push(score);
+    topscores.sort((a, b) => b - a);
+    topscores = topscores.slice(0, 3);
+    localStorage.setItem("flabby-topscores", JSON.stringify(topscores));
+
+    // render scores
+    context.fillStyle = "#000";
+    context.textAlign = "center";
+    context.font = "25px monospace";
+    context.fillText("TOP SCORES", game_width/2, game_height/2 + 90);
+    context.fillText(`1: ${topscores[0]}`, game_width/2, game_height/2 + 130);
+    context.fillText(`2: ${topscores[1]}`, game_width/2, game_height/2 + 160);
+    context.fillText(`3: ${topscores[2]}`, game_width/2, game_height/2 + 190);
+}
+
 function resetGame() {
     for (let i = 0; i < pipes.length; i++) {
         pipes[i].x = game_width + pipe_gap*i;
+        pipes[i].sety();
         pipes[i].color = "#00dd00";
+        pipes[i].point_awarded = false;
     }
 
     paused = true;
     flabby.dead = false;
     flabby.y = game_height/2;
     flabby.yv = 0;
-    score = 0;
     updateCanvas();
+    checkTopScores();
+    score = 0;
 
     context.fillStyle = "#000";
     context.textAlign = "center";
