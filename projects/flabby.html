@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="/websitefavicon.png">
+    <link rel="stylesheet" href="/css/maintheme.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/footer.css">
+
+    <title>Projects - Flabby Bird</title>
+
+    <style>
+        #game-canvas {
+            background-color: rgba(255,255,255,0.3);
+            /* background-color: white; */
+            margin-inline: auto;
+            display: block;
+            border: var(--border) 5px solid;
+        }
+
+        #fullscreen-button {
+            margin: 2rem;
+            margin-inline: auto;
+        }
+    </style>
+
+    <script defer src="/js/themeinject.js"></script>
+    <script defer src="/js/flabby.js"></script>
+</head>
+<body>
+
+    <div id="nav-placeholder"></div>
+
+    <main>
+        <h1 class="top-card glow-border">Flabby Bird</h1>
+        <canvas id="game-canvas"></canvas>
+        <a id="fullscreen-button" class="abutton" onclick="document.getElementById('game-canvas').requestFullscreen();">Go Fullscreen</a>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+</body>
+</html>
