@@ -7,7 +7,6 @@ canvas.width = game_width;
 canvas.height = game_height;
 
 const gravity = -0.5;
-const pipe_gap = (game_width + 50)/3;
 let score = 0;
 let topscores = JSON.parse(localStorage.getItem("flabby-topscores"));
 if (topscores == null) {
@@ -15,8 +14,7 @@ if (topscores == null) {
     localStorage.setItem("flabby-topscores", JSON.stringify(topscores));
 }
 
-console.log(topscores);
-
+let pipes_moving = true;
 
 class Flabby {
     constructor(x, y) {
@@ -25,14 +23,26 @@ class Flabby {
         this.yv = 0;
         this.width = 20;
         this.height = 20;
+
         this.jumpStrength = -30;
+
         this.dead = false;
+        this.has_shield = false;
     }
 
     render() {
-        context.fillStyle = (this.dead) ? "#ff0000" : "#ffff00";
+
+        // shield
+        if (this.has_shield) {
+            context.fillStyle = "#99f"; 
+            context.beginPath();
+            context.arc(this.x, this.y, 20, 0, 2*Math.PI);
+            context.fill();
+            context.stroke();
+        }
 
         // body
+        context.fillStyle = (this.dead) ? "#ff0000" : "#ffff00";
         context.beginPath();
         context.fillRect(this.x-this.width/2, this.y-this.height/2, this.width, this.height);
 
@@ -59,20 +69,36 @@ class Flabby {
 
         context.fill();
         // context.stroke();
+
     }
 
     update() {
         this.y += this.yv;
+
         // floor and ceiling
         if (this.y > game_height) {
             this.y = game_height - this.height/2;
             this.dead = true;
             paused = true;
+
+            if (this.has_shield) {
+                this.has_shield = false;
+                this.dead = false;
+                paused = false;
+                this.safetyReset();
+            }
         }
         if (this.y < 0) {
             this.y = 0 + this.height/2;
             this.dead = true;
             paused = true;
+
+            if (this.has_shield) {
+                this.has_shield = false;
+                this.dead = false;
+                paused = false;
+                this.safetyReset();
+            }
         }
 
         this.yv -= gravity;
@@ -85,6 +111,30 @@ class Flabby {
         this.render();
     }
 
+    distanceFrom(x, y) {
+        return Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2));
+    }
+
+    closestPipe() {
+        let min_distance = 999999;
+        let ref_index;
+
+        for (let i = 0; i < pipes.length; i++) {
+            let distance = pipes[i].x - this.x;
+            if (distance < min_distance && distance > 0) {
+                ref_index = i;
+                min_distance = distance;
+            }
+        }
+
+        return pipes[ref_index];
+    }
+
+    safetyReset() {
+        this.y = this.closestPipe().y;
+        this.yv = this.jumpStrength/2;
+    }
+
     checkCollision() {
         pipes.forEach(pipe => {
 
@@ -94,30 +144,49 @@ class Flabby {
             let collidingY = (this.y + this.height/2 >= pipe.y + pipe.gap || this.y - this.height/2 <= pipe.y - pipe.gap);
             let collidingY_end = ((this.y + this.height/2 >= pipe.y + pipe.gap && this.y - this.height/2 <= pipe.y + pipe.gap + pipe.end_height) || (this.y - this.height/2 <= pipe.y - pipe.gap && this.y + this.height/2 >= pipe.y - pipe.gap - pipe.end_height));
 
-            if ((collidingX && collidingY) || (collidingX_end && collidingY_end)) {
-                this.dead = true;
-                paused = true;
+            if (((collidingX && collidingY) || (collidingX_end && collidingY_end))) {
+                if (this.has_shield) {
+                    this.has_shield = false;
+                    this.safetyReset();
+                } else {
+                    this.dead = true;
+                    paused = true;
+                }
+
             }
         });
+
+
+        if (this.distanceFrom(powerup.x, powerup.y) <= powerup.radius + 10) {
+            this.has_shield = true;
+            powerup.y = 1000;
+            this.safetyReset();
+        }
     }
 }
 
 let flabby = new Flabby(game_width/3, game_height/2);
 
 class Pipe {
-    constructor(startx) {
-        this.x = startx;
+    constructor(id) {
+        this.id = id;
+        this.pipe_gap = 250;
+        this.x = game_width + this.pipe_gap * this.id;
+
         this.sety();
+
         this.width = 50;
         this.gap = 80;
-        this.end_width = 10;
+        this.end_width = 15;
         this.end_height = 20;
+
         this.speed = 3;
         this.color = "#00dd00";
         this.point_awarded = false;
     }
 
     sety() {
+        this.y = game_height/2;
         this.y = game_height/2 + (Math.random() > 0.5 ? -1 : 1) * (Math.random() * 200);
         this.gap = Math.random() * 80 + 60;
     }
@@ -133,17 +202,36 @@ class Pipe {
         context.rect(this.x-this.width/2-this.end_width, this.y-this.gap, this.width + this.end_width*2, -this.end_height)
         context.rect(this.x-this.width/2-this.end_width, this.y+this.gap, this.width + this.end_width*2, this.end_height)
 
+        // context.fillText(this.id, this.x, this.y);
+
         context.fill();
         context.stroke();
     }
 
     update() {
-        this.x -= this.speed;
-        if (this.x < 0) {
-            this.x = game_width + 50;
+        if (pipes_moving) {
+            this.x -= this.speed;
+        }
+
+        if (this.x < -(this.width/2 + this.end_width)) {
+            let previous = this.id - 1;
+            if (previous < 0) {
+                previous = pipes.length - 1;
+            }
+            this.x = pipes[previous].x + this.pipe_gap;
+
             this.sety();
             this.point_awarded = false;
-            this.color = ((score + 3) % 10 == 0) ? "#ff0" : "#00dd00";
+
+            // every 10th pipe
+            this.color = ((score + 4) % 10 == 0) ? "#ffff00" : "#00dd00";
+
+            // spawn powerup
+            if (Math.random() > 0.8 && powerup.y == 1000 && !flabby.has_shield) {
+                powerup.x = this.x + this.width/2 + this.end_width + 80;
+                powerup.y = Math.random() * (game_height-60) + 30;
+                console.log("spawned")
+            }
         }
 
         if (this.x <= flabby.x && !this.point_awarded) {
@@ -151,16 +239,68 @@ class Pipe {
             this.point_awarded = true;
         }
 
-        this.speed = score/15 + 3;
+        this.speed = 3 + Math.floor(score / 10)/2;
 
         this.render();
     }
 }
 
-let pipe = new Pipe(game_width);
-let pipe2 = new Pipe(game_width+pipe_gap);
-let pipe3 = new Pipe(game_width+pipe_gap*2);
-let pipes = [pipe, pipe2, pipe3];
+let pipe0 = new Pipe(0);
+let pipe1 = new Pipe(1);
+let pipe2 = new Pipe(2);
+let pipe3 = new Pipe(3);
+let pipes = [pipe0, pipe1, pipe2, pipe3];
+
+class Powerup {
+    constructor() {
+        this.x = game_width/2;
+        this.y = 1000;
+        this.width = 25;
+        this.height = 30;
+        this.radius = 20;
+
+        this.speed = 3;
+    }
+
+    update() {
+        this.x -= this.speed;
+
+        if (this.x < 0) {
+            this.y = 1000;
+        }
+
+        this.speed = 3 + Math.floor(score/10)/2;
+
+        this.render();
+    }
+
+    render() {
+        context.fillStyle = "#99f"; 
+        context.beginPath();
+        context.arc(this.x, this.y, this.radius, 0, 2*Math.PI);
+        context.fill();
+        context.stroke();
+
+        context.fillStyle = "#46A2B4";
+        context.beginPath();
+        context.moveTo(this.x - this.width/2, this.y - this.height/5);
+        context.lineTo(this.x - this.width/4, this.y - this.height/3.5);
+        context.lineTo(this.x, this.y - this.height/2);
+        context.lineTo(this.x + this.width/4, this.y - this.height/3.5);
+        context.lineTo(this.x + this.width/2, this.y - this.height/5);
+        context.lineTo(this.x + this.width/2, this.y + 2);
+        context.lineTo(this.x + this.width/4, this.y + 10);
+        context.lineTo(this.x, this.y + this.height/2);
+        context.lineTo(this.x - this.width/4, this.y + 10);
+        context.lineTo(this.x - this.width/2, this.y + 2);
+        context.closePath();
+        context.fill();
+        context.stroke();
+
+    }
+}
+
+let powerup = new Powerup();
 
 let jumpReady = true;
 document.addEventListener('keydown', (e) => {
@@ -209,19 +349,24 @@ function checkTopScores() {
 
 function resetGame() {
     for (let i = 0; i < pipes.length; i++) {
-        pipes[i].x = game_width + pipe_gap*i;
+        pipes[i].x = game_width + pipes[i].pipe_gap * pipes[i].id;
         pipes[i].sety();
         pipes[i].color = "#00dd00";
         pipes[i].point_awarded = false;
     }
 
     paused = true;
+
     flabby.dead = false;
     flabby.y = game_height/2;
     flabby.yv = 0;
+    flabby.has_shield = false;
+
     updateCanvas();
     checkTopScores();
     score = 0;
+
+    powerup.y = 1000;
 
     context.fillStyle = "#000";
     context.textAlign = "center";
@@ -247,6 +392,7 @@ function gameLoop(timestamp) {
     if (!paused) {
         updateCanvas();
         pipes.forEach(pipe => pipe.update());
+        powerup.update();
         flabby.update();
         context.fillStyle = "#000";
         context.textAlign = "center";
