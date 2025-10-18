@@ -15,10 +15,10 @@ let game_over = false;
 let paused = false;
 let score = 0;
 
-let topscores = JSON.parse(localStorage.getItem("snake-topscores"));
-if (topscores == null) {
-    topscores = [0, 0, 0];
-    localStorage.setItem("snake-topscores", JSON.stringify(topscores));
+let highscores = JSON.parse(localStorage.getItem("snake-highscores"));
+if (highscores == null) {
+    highscores = [0, 0, 0];
+    localStorage.setItem("snake-highscores", JSON.stringify(highscores));
 }
 
 let lastUpdateTime = 0;
@@ -143,14 +143,14 @@ class Food {
 var snake = new Snake(7, 10);
 var food = new Food(12, 10);
 
-function checkTopScores() {
-    topscores.push(score);
-    topscores.sort((a, b) => b - a); // sort descending
-    topscores = topscores.slice(0, 3);
-    localStorage.setItem("snake-topscores", JSON.stringify(topscores));
+function checkHighScores() {
+    highscores.push(score);
+    highscores.sort((a, b) => b - a); // sort descending
+    highscores = highscores.slice(0, 3);
+    localStorage.setItem("snake-highscores", JSON.stringify(highscores));
 }
 
-let topscoresUpdated = false;
+let highscoresUpdated = false;
 
 function updateCanvas() {
     // render background
@@ -158,9 +158,9 @@ function updateCanvas() {
     context.fillRect(0, 0, game_width, game_height);
 
     if (game_over) {
-        if (!topscoresUpdated) {
-            checkTopScores();
-            topscoresUpdated = true;
+        if (!highscoresUpdated) {
+            checkHighScores();
+            highscoresUpdated = true;
         }
 
         context.fillStyle = "#fff";
@@ -189,10 +189,10 @@ function updateCanvas() {
             context.fillStyle = "#fff";
             context.textAlign = "center";
             context.font = "25px monospace";
-            context.fillText("TOP SCORES", game_width/2, game_height/2 + 100);
-            context.fillText(`1: ${topscores[0]}`, game_width/2, game_height/2 + 140);
-            context.fillText(`2: ${topscores[1]}`, game_width/2, game_height/2 + 180);
-            context.fillText(`3: ${topscores[2]}`, game_width/2, game_height/2 + 220);
+            context.fillText("HIGH SCORES", game_width/2, game_height/2 + 100);
+            context.fillText(`1: ${highscores[0]}`, game_width/2, game_height/2 + 140);
+            context.fillText(`2: ${highscores[1]}`, game_width/2, game_height/2 + 180);
+            context.fillText(`3: ${highscores[2]}`, game_width/2, game_height/2 + 220);
         }
     }
 
@@ -205,7 +205,7 @@ function updateCanvas() {
 
 document.addEventListener('keydown', (e) => {
     if (e.code == "KeyR") {
-        topscoresUpdated = false;
+        highscoresUpdated = false;
         snake.x = snake.startx;
         snake.y = snake.starty;
         food.x = food.startx;
