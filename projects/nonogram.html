@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/png" href="/websitefavicon.png">
+    <link rel="stylesheet" href="/css/maintheme.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/nonogram.css">
+
+    <title>Projects - Nonogram</title>
+
+    <style>
+        #fullscreen-button {
+            margin: 2rem;
+            margin-inline: auto;
+        }
+    </style>
+
+    <script defer src="/js/themeinject.js"></script>
+    <script defer src="/js/nonogram.js"></script>
+</head>
+<body>
+
+    <div id="nav-placeholder"></div>
+
+    <main>
+        <h1 class="top-card glow-border">Nonogram</h1>
+        <div id="game-area" class="glow-border">
+            <div id="game-header">
+                <button onclick="resetBoard();">Clear</button>
+                <h1 id="timer">00:00:00</h1>
+                <h1 id="solved"></h1>
+            </div>
+
+            <div class="game-area-row">
+                <div id="top-clues" class="clue"></div>
+            </div>
+
+            <div class="game-area-row">
+                <div id="left-clues" class="clue"></div>
+                <div id="board"></div>
+                <div id="right-clues" class="clue"></div>
+            </div>
+
+            <div class="game-area-row">
+                <div id="bottom-clues" class="clue">
+                    <button onclick="init()">New Puzzle</button>
+                    <div id="selection-container">
+                        <p>New Puzzle Size</p>
+                        <select id="size-selection" oninput="selectedSizeChanged()">
+                            <option value="5x5">5x5</option>    
+                            <option value="10x10">10x10</option>
+                            <option value="15x15">15x15</option>
+                        </select>
+                    </div>
+                    <button onclick="init(random=true)">Randomize Puzzle</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <a id="fullscreen-button" class="abutton" onclick="document.getElementById('game-area').requestFullscreen();">Go Fullscreen</a>
+
+    <div id="footer-placeholder"></div>
+
+</body>
+</html>
