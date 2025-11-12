@@ -176,7 +176,7 @@ body {
     margin-inline: auto;
 }
 
-.card a {
+.card a, .card p {
     color: var(--text-main);
     text-decoration: none;
     font-size: 1.4rem;
