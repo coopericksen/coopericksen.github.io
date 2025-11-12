@@ -1,0 +1,143 @@
+.box {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 1px;
+    flex-wrap: wrap;
+    border: 2px solid var(--accent);
+    /* border-radius: 1rem; */
+}
+
+.boxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.sudoku-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border: 1px solid var(--accent);
+    color: var(--text-main);
+    font-size: 1.8rem;
+    font-weight: bold;
+    /* border-radius: 1rem; */
+}
+
+.read-only {
+    font-weight: normal;
+    font-size: 1.5rem;
+    color: var(--accent)
+}
+
+.error-cell {
+    background-color: var(--primary);
+    color: var(--text-main);
+}
+
+#game-area {
+    width: max-content;
+    background-color: var(--background);
+    margin-inline: auto;
+    border-radius: 1rem;
+    padding: 1rem 3rem;
+    cursor: crosshair;
+}
+
+#puzzle-button-container {
+    display: flex;
+    justify-content: center;
+}
+
+#new-puzzle-button {
+    background-color: var(--button-main);
+    color: var(--button-text-main);
+    border: 2px solid var(--border);
+    border-radius: 1rem;
+    padding: 0.5rem;
+    margin: 1rem;
+    cursor: pointer;
+}
+
+#new-puzzle-button:hover {
+    background-color: var(--accent);
+    color: var(--button-text-secondary);
+}
+
+#clear-puzzle-button {
+    background-color: var(--button-main);
+    color: var(--button-text-main);
+    border: 2px solid var(--border);
+    border-radius: 1rem;
+    padding: 0.5rem;
+    margin: 1rem;
+    cursor: pointer;
+}
+
+#clear-puzzle-button:hover {
+    background-color: var(--accent);
+    color: var(--button-text-secondary);
+}
+
+#new-puzzle-difficulty {
+    height: max-content;
+    align-self: center;
+}
+
+#timer {
+    text-align: center;
+    color: var(--accent);
+    margin: 1rem;
+    margin-inline: 0;
+    font-size: 2rem;
+    font-family: monospace;
+}
+
+#solved {
+    position: absolute;
+    right: 3rem;
+    text-align: center;
+    color: var(--accent);
+    font-size: 1.2rem;
+    margin: 1rem;
+}
+
+#top-stuff-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.number-select-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--button-main);
+    color: var(--button-text-main);
+    padding: 1rem;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    border: 2px solid var(--border)
+}
+
+.number-select-button:hover {
+    background-color: var(--button-secondary);
+    color: var(--button-text-secondary);
+}
+
+.number-select-button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 1rem;
+    gap: 1px;
+}
+
+.number-selected {
+    background-color: var(--secondary) !important;
+    color: var(--text-alt)
+}
