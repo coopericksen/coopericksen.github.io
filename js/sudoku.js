@@ -284,7 +284,9 @@ class SudokuCell {
     }
 
     clicked() {
-        puzzle[this.y][this.x] = selectedNumber;
+        if (!this.readOnly) {
+            puzzle[this.y][this.x] = selectedNumber;
+        }
         validPuzzle();
         refreshBoard();
     }
@@ -389,6 +391,12 @@ function isSolved() {
 function setSelectedHighlight() {
     for(let i = 0; i < numButtons.length; i++) {
         numButtons[i].classList.remove("number-selected");
+    }
+
+    if (selectedNumber == 0) {
+        gameArea.style.cursor = "not-allowed"
+    } else {
+        gameArea.style.cursor = "crosshair";
     }
 
     numButtons[selectedNumber].classList.add("number-selected");

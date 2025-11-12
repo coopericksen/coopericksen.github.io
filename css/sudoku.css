@@ -24,6 +24,8 @@
     font-size: 1.8rem;
     font-weight: bold;
     /* border-radius: 1rem; */
+
+    transition: background-color 0.5s ease;
 }
 
 .read-only {
@@ -43,7 +45,6 @@
     margin-inline: auto;
     border-radius: 1rem;
     padding: 1rem 3rem;
-    cursor: crosshair;
 }
 
 #puzzle-button-container {
@@ -59,11 +60,13 @@
     padding: 0.5rem;
     margin: 1rem;
     cursor: pointer;
+    transition: transform 0.5s ease;
 }
 
 #new-puzzle-button:hover {
     background-color: var(--accent);
     color: var(--button-text-secondary);
+    transform: scaleX(1.3) scaleY(1.3);
 }
 
 #clear-puzzle-button {
@@ -74,11 +77,13 @@
     padding: 0.5rem;
     margin: 1rem;
     cursor: pointer;
+    transition: transform 0.5s ease;
 }
 
 #clear-puzzle-button:hover {
     background-color: var(--accent);
     color: var(--button-text-secondary);
+    transform: scaleX(1.3) scaleY(1.3);
 }
 
 #new-puzzle-difficulty {
@@ -113,6 +118,7 @@
 .number-select-button {
     display: flex;
     justify-content: center;
+    align-self: center;
     align-items: center;
     background-color: var(--button-main);
     color: var(--button-text-main);
@@ -121,12 +127,15 @@
     height: 40px;
     cursor: pointer;
     border-radius: 0.5rem;
-    border: 2px solid var(--border)
+    border: 2px solid var(--border);
+    transition: transform 0.5s ease;
 }
 
 .number-select-button:hover {
     background-color: var(--button-secondary);
     color: var(--button-text-secondary);
+    transform: scaleX(1.3) scaleY(1.3);
+    z-index: 99;
 }
 
 .number-select-button-container {
