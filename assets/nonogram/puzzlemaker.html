@@ -10,6 +10,8 @@
       flex-direction: column;
       align-items: center;
       margin-top: 2rem;
+      background-color: #222;
+      color: #fff;
     }
     #controls {
       margin-bottom: 1rem;
@@ -35,6 +37,7 @@
     #output {
       white-space: pre-wrap;
       background: #f9f9f9;
+      color: #000;
       padding: 1rem;
       border: 1px solid #ccc;
       width: 300px;
@@ -58,6 +61,7 @@
     <input type="text" id="pattern-name" placeholder="Enter pattern name" style="margin-top: 1rem;">
     <input type="text" id="file-name" placeholder="Filename (e.g. patterns.json)" style="margin-top: 0.5rem;">
     <div id="buttons">
+      <input type="file" accept=".json" id="upload-btn">
       <button id="save-btn">Save Pattern</button>
       <button id="clear-btn">Clear Pattern</button>
       <button id="download-btn">Download JSON</button>
@@ -70,129 +74,187 @@
   <div id="output"></div>
 
   <script>
-    const grid = document.getElementById('grid');
-    const output = document.getElementById('output');
-    const slider = document.getElementById('size-slider');
-    const sizeLabel = document.getElementById('size-label');
-    const sizeLabel2 = document.getElementById('size-label-2');
-    const nameInput = document.getElementById('pattern-name');
-    const fileInput = document.getElementById('file-name');
-    const saveBtn = document.getElementById('save-btn');
-    const clearBtn = document.getElementById('clear-btn');
-    const downloadBtn = document.getElementById('download-btn');
+  const grid = document.getElementById('grid');
+  const output = document.getElementById('output');
+  const slider = document.getElementById('size-slider');
+  const sizeLabel = document.getElementById('size-label');
+  const sizeLabel2 = document.getElementById('size-label-2');
+  const nameInput = document.getElementById('pattern-name');
+  const fileInput = document.getElementById('file-name');
+  const saveBtn = document.getElementById('save-btn');
+  const clearBtn = document.getElementById('clear-btn');
+  const downloadBtn = document.getElementById('download-btn');
+  const uploadBtn = document.getElementById('upload-btn');
 
-    let gridSize = parseInt(slider.value);
-    let savedPatterns = {};
-    let isMouseDown = false;
+  let gridSize = parseInt(slider.value);
+  let savedPatterns = {};
+  let isMouseDown = false;
 
-    function createGrid(size) {
-      grid.innerHTML = '';
-      grid.style.gridTemplateColumns = `repeat(${size}, 40px)`;
-      grid.style.gridTemplateRows = `repeat(${size}, 40px)`;
+  function createGrid(size) {
+    grid.innerHTML = '';
+    grid.style.gridTemplateColumns = `repeat(${size}, 40px)`;
+    grid.style.gridTemplateRows = `repeat(${size}, 40px)`;
 
-      for (let i = 0; i < size * size; i++) {
-        const cell = document.createElement('div');
-        cell.classList.add('cell');
-        cell.dataset.index = i;
+    for (let i = 0; i < size * size; i++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      cell.dataset.index = i;
 
-        cell.addEventListener('mousedown', () => {
-          isMouseDown = true;
-          cell.classList.toggle('active');
-        });
+      cell.addEventListener('mousedown', () => {
+        isMouseDown = true;
+        cell.classList.toggle('active');
+      });
 
-        cell.addEventListener('mouseover', () => {
-          if (isMouseDown) {
-            cell.classList.add('active');
-          }
-        });
+      cell.addEventListener('mouseover', () => {
+        if (isMouseDown) {
+          cell.classList.add('active');
+        }
+      });
 
-        cell.addEventListener('mouseup', () => {
-          isMouseDown = false;
-        });
-
-        grid.appendChild(cell);
-      }
-
-      document.body.addEventListener('mouseup', () => {
+      cell.addEventListener('mouseup', () => {
         isMouseDown = false;
       });
+
+      grid.appendChild(cell);
     }
 
-    function getPatternArray() {
-      const cells = document.querySelectorAll('.cell');
-      const pattern = [];
-      for (let row = 0; row < gridSize; row++) {
-        const rowData = [];
-        for (let col = 0; col < gridSize; col++) {
-          const index = row * gridSize + col;
-          rowData.push(cells[index].classList.contains('active') ? 1 : 0);
-        }
-        pattern.push(rowData);
+    document.body.addEventListener('mouseup', () => {
+      isMouseDown = false;
+    });
+  }
+
+  function getPatternArray() {
+    const cells = document.querySelectorAll('.cell');
+    const pattern = [];
+    for (let row = 0; row < gridSize; row++) {
+      const rowData = [];
+      for (let col = 0; col < gridSize; col++) {
+        const index = row * gridSize + col;
+        rowData.push(cells[index].classList.contains('active') ? 1 : 0);
       }
-      return pattern;
+      pattern.push(rowData);
     }
+    return pattern;
+  }
 
-    function savePattern() {
-      const name = nameInput.value.trim();
-      if (!name) {
-        alert('Please enter a name for the pattern.');
-        return;
-      }
-      const pattern = getPatternArray();
-      savedPatterns[name] = pattern;
-      nameInput.value = '';
-      updateOutput();
+  function savePattern() {
+    const name = nameInput.value.trim();
+    if (!name) {
+      alert('Please enter a name for the pattern.');
+      return;
     }
+    const pattern = getPatternArray();
+    savedPatterns[name] = pattern;
+    nameInput.value = '';
+    updateOutput();
+  }
 
-    function clearPattern() {
-      document.querySelectorAll('.cell').forEach(cell => {
-        cell.classList.remove('active');
-      });
-    }
-
-    function updateOutput() {
-      output.textContent = formatPatterns(savedPatterns);
-    }
-
-    function formatPatterns(patterns) {
-      let result = '{\n';
-      const entries = Object.entries(patterns);
-      entries.forEach(([name, grid], i) => {
-        result += `  "${name}": [\n`;
-        grid.forEach((row, j) => {
-          result += `    [${row.join(',')}]${j < grid.length - 1 ? ',' : ''}\n`;
-        });
-        result += i < entries.length - 1 ? '  ],\n' : '  ]\n';
-      });
-      result += '}';
-      return result;
-    }
-
-    function downloadPatterns() {
-      const filename = fileInput.value.trim() || 'patterns.json';
-      const content = formatPatterns(savedPatterns);
-      const blob = new Blob([content], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    slider.addEventListener('input', () => {
-      gridSize = parseInt(slider.value);
-      sizeLabel.textContent = gridSize;
-      sizeLabel2.textContent = gridSize;
-      createGrid(gridSize);
+  function clearPattern() {
+    document.querySelectorAll('.cell').forEach(cell => {
+      cell.classList.remove('active');
     });
 
-    saveBtn.addEventListener('click', savePattern);
-    clearBtn.addEventListener('click', clearPattern);
-    downloadBtn.addEventListener('click', downloadPatterns);
+    nameInput.value = "";
+  }
 
+  function updateOutput() {
+    output.innerHTML = ''; // clear previous
+    const entries = Object.entries(savedPatterns);
+
+    entries.forEach(([name, grid]) => {
+      const div = document.createElement('div');
+      div.textContent = name;
+      div.style.cursor = 'pointer';
+      div.style.padding = '4px';
+      div.style.borderBottom = '1px solid #ddd';
+
+      // When clicked, load pattern into grid
+      div.addEventListener('click', () => {
+        loadPattern(grid);
+        nameInput.value = name;
+      });
+
+      output.appendChild(div);
+    });
+  }
+
+  function formatPatterns(patterns) {
+    let result = '{\n';
+    const entries = Object.entries(patterns);
+    entries.forEach(([name, grid], i) => {
+      result += `  "${name}": [\n`;
+      grid.forEach((row, j) => {
+        result += `    ${JSON.stringify(row)}${j < grid.length - 1 ? ',' : ''}\n`;
+      });
+      result += i < entries.length - 1 ? '  ],\n' : '  ]\n';
+    });
+    result += '}';
+    return result;
+  }
+
+  function downloadPatterns() {
+    const filename = fileInput.value.trim() || 'patterns.json';
+    const content = formatPatterns(savedPatterns); // use custom formatter
+    const blob = new Blob([content], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function loadPattern(pattern) {
+    gridSize = pattern.length;
+    slider.value = gridSize;
+    sizeLabel.textContent = gridSize;
+    sizeLabel2.textContent = gridSize;
     createGrid(gridSize);
-  </script>
+
+    const cells = document.querySelectorAll('.cell');
+    for (let row = 0; row < gridSize; row++) {
+      for (let col = 0; col < gridSize; col++) {
+        const index = row * gridSize + col;
+        if (pattern[row][col] === 1) {
+          cells[index].classList.add('active');
+        }
+      }
+    }
+  }
+
+  slider.addEventListener('input', () => {
+    gridSize = parseInt(slider.value);
+    sizeLabel.textContent = gridSize;
+    sizeLabel2.textContent = gridSize;
+    createGrid(gridSize);
+  });
+
+  saveBtn.addEventListener('click', savePattern);
+  clearBtn.addEventListener('click', clearPattern);
+  downloadBtn.addEventListener('click', downloadPatterns);
+
+  uploadBtn.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        const jsonData = JSON.parse(ev.target.result);
+        savedPatterns = jsonData;
+        updateOutput(); // show clickable patterns
+        console.log("Loaded patterns:", jsonData);
+      } catch (err) {
+        console.error("Invalid JSON file:", err);
+        alert("Invalid JSON file.");
+      }
+    };
+    reader.readAsText(file); // ✅ ensure file is read
+  });
+
+  createGrid(gridSize);
+</script>
+
 
 </body>
 </html>
