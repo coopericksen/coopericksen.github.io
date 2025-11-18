@@ -26,7 +26,6 @@ let failed;
 async function newWord() {
     word = await selectRandomWord();
     lettersInWord = Array.from(word);
-    word = "STARE";
     resetGame();
     // console.log(word)
 }
