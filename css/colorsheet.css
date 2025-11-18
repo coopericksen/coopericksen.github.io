@@ -3,7 +3,7 @@
 
 :root { 
     --text-main: #D3D3D3;
-    --text-alt: #222222;
+    --text-alt: #100C08;
     --background: #0A0F29; 
     --primary: #2F27CE;
     --secondary: #1FB6FF;
@@ -18,7 +18,7 @@
 
 :root:has(#theme-dark:checked) {
     --text-main: #D3D3D3;
-    --text-alt: #222222;
+    --text-alt: #100C08;
     --background: #0A0F29; 
     --primary: #2F27CE;
     --secondary: #1FB6FF;
@@ -35,15 +35,15 @@
     --text-main: #000000;
     --text-alt: #D3D3D3;
     --background: #DEDEDE; 
-    --primary: #200861;
+    --primary: #6473C1;
     --secondary: #787878;
-    --accent: #6473C1;
+    --accent: #200861;
     --border: #4040a0;
 
     --button-main: var(--primary);
     --button-secondary: var(--accent);
-    --button-text-main: var(--text-alt);
-    --button-text-secondary: var(--text-main);
+    --button-text-main: var(--text-main);
+    --button-text-secondary: var(--text-alt);
 }
 
 :root:has(#theme-blue:checked) {

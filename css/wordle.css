@@ -1,0 +1,170 @@
+@import url(colorsheet.css);
+
+#game-area {
+    background-color: var(--background);
+    width: max-content;
+    margin: 1rem;
+    margin-inline: auto;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.letter-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background);
+    color: var(--text-main);
+    width: 60px;
+    aspect-ratio: 1/1;
+    border: 3px solid var(--border);
+    box-sizing: border-box;
+    border-radius: 0.5rem;
+    font-size: 1.8rem;
+
+    /* transition: background-color 0.1s 0.2s, color 0.1s 0.2s; */
+}
+
+.letter-cell-row {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+    gap: 5px;
+}
+
+@keyframes reveal {
+    50% { transform: scaleY(0); }
+    100% { transform: scaleY(1); }
+}
+
+.checked-cell {
+    animation: reveal 0.3s ease forwards;
+}
+
+#legend {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.legend-item {
+    border: 2px solid var(--border);
+    border-radius: 1rem;
+    text-align: center;
+    padding: 0.2rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+#legend-correct {
+    background-color: var(--primary);
+    color: var(--text-main);
+}
+
+#legend-close {
+    background-color: var(--accent);
+    color: var(--text-alt);
+}
+
+#keyboard {
+    display: flex;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 1rem;
+    gap: 3px;
+}
+
+.keyboard-key {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background);
+    color: var(--border);
+    width: 3rem;
+    height: 3rem;
+    /* padding: 0.8rem; */
+    border: 3px solid var(--border);
+    border-radius: 1rem;
+    font-size: 1.2rem;
+    transition: transform 0.2s ease, background-color 0.5s ease;
+    cursor: pointer;
+}
+
+.keyboard-key:hover {
+    /* background-color: var(--button-secondary);
+    color: var(--button-text-secondary); */
+    border-color: var(--accent);
+    z-index: 99;
+    transform: scaleX(1.2) scaleY(1.2);
+}
+
+.backspace-keyboard-key {
+    width: 5rem;
+    font-size: 2rem;
+}
+
+.enter-keyboard-key {
+    width: 5rem;
+}
+
+.correct-cell {
+    background-color: var(--primary) !important;
+    color: var(--text-main);
+    /* border: 5px solid #0f0; */
+}
+
+.close-cell {
+    background-color: var(--accent);
+    color: var(--text-alt);
+    /* border: 5px solid #ff0; */
+}
+
+.wrong-cell {
+    /* background-color: var(--background);
+    color: var(--text-main) */
+    opacity: 0.2;
+}
+
+#button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+}
+
+#new-word-button {
+    background-color: var(--button-main);
+    color: var(--button-text-main);
+    border-radius: 1rem;
+    padding: 0.5rem;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#new-word-button:hover {
+    background-color: var(--button-secondary);
+    color: var(--button-text-secondary);
+    transform: scaleX(1.2) scaleY(1.2);
+}
+
+#solved-text {
+    font-size: 2rem;
+    position: absolute;
+    top: 430px;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    background-color: var(--background);
+    
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.show-solved-text {
+    opacity: 1 !important;
+}
