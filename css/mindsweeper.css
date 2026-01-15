@@ -1,0 +1,40 @@
+@import url(colorsheet.css);
+
+#game-area {
+    width: fit-content;
+    height: fit-content;
+    border: 2px solid white;
+    margin-inline: auto;
+    padding: 1rem;
+}
+
+#board {
+    background-color: var(--background);
+}
+
+.board-row {
+    display: flex;
+    justify-content: center;
+}
+
+.cell {
+    user-select: none;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    /* display: flex; */
+    text-align: center;
+    align-content: center;
+    font-size: 1.3rem;
+    color: var(--text-main);
+}
+
+.cell-revealed-mine {
+    background-color: var(--accent);
+    font-size: 2rem;
+    padding-top: 5px;
+    color: var(--text-alt);
+}
+
+.cell-revealed-clear {
+    background-color: var(--primary);
+}
