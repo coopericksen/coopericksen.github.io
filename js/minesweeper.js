@@ -1,0 +1,203 @@
+const game_area = document.getElementById("game-area");
+
+let game_rows = 10;
+let game_cols = 10;
+let mine_probability = 0.20;
+let is_first_click = true;
+let mine_count = 0;
+let is_flag_key_down = false;
+
+// disable dragging
+document.body.ondragstart = () => {
+    return false;
+};
+
+let is_mouse_down = false;
+document.body.addEventListener("mousedown", () => {
+    is_mouse_down = true;
+});
+document.body.addEventListener("mouseup", () => {
+    is_mouse_down = false;
+});
+
+class Cell {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.revealed = false;
+        this.mine = false;
+        this.number = 0;
+        this.is_hovering = false;
+        this.flagged = false;
+
+        this.el = document.createElement("div");
+        this.el.classList.add("cell");
+        this.el.style.width = "40px";
+        this.el.style.height = "40px";
+
+        this.el.addEventListener("mouseover", () => {
+            this.is_hovering = true;
+            if (is_mouse_down) {
+                if (is_first_click) {
+                    setupMines();
+                    this.mine = false;
+                    calculateNumbers();
+                    is_first_click = false;
+                }
+                this.sweep();
+            }
+        });
+
+        this.el.addEventListener("mouseout", () => {
+            this.is_hovering = false;
+        });
+
+        this.el.addEventListener("mousedown", (e) => {
+            if (e.button == 0 && !is_flag_key_down) {
+                if (is_first_click) {
+                    setupMines();
+                    this.mine = false;
+                    calculateNumbers();
+                    is_first_click = false;
+                }
+                this.sweep();
+            } else if (e.button == 2 || is_flag_key_down) {
+                this.flagged = !this.flagged;
+                if (this.revealed) {
+                    this.flagged = false;
+                } else {
+                    this.el.innerHTML = this.flagged ? "&#x2691;" : "";
+                }
+            }
+        });
+
+        this.el.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+        })
+    }
+
+    sweep() {
+        this.revealed = true;
+        
+        this.el.classList.add(this.mine ? "cell-revealed-mine" : "cell-revealed-clear");
+
+        if (this.number > 0) {
+            this.el.textContent = this.number;
+        }
+
+        if (this.mine) {
+            this.el.textContent = "*";
+            console.log("ded");
+        }
+    }
+}
+
+let board_cells = [];
+const board = document.getElementById("board");
+
+for (let i = 0; i < game_cols; i++) {
+    let board_row = [];
+    let board_row_el = document.createElement("div");
+    board_row_el.classList.add("board-row");
+
+    for (let j = 0; j < game_rows; j++) {
+        let cell = new Cell(j, i);
+        board_row.push(cell);
+        board_row_el.appendChild(cell.el);
+    }
+
+    board_cells.push(board_row);
+    board.appendChild(board_row_el);
+}
+
+function setupMines() {
+    for (let i = 0; i < game_cols; i++) {
+        for (let j = 0; j < game_rows; j++) {
+            board_cells[j][i].mine = false;
+            if (Math.random() < mine_probability) {
+                board_cells[j][i].mine = true;
+            }
+        }
+    }
+}
+
+function isCellMine(x, y) {
+    if (x < 0 || y < 0 || x >= game_rows || y >= game_cols) {
+        return false;
+    };
+
+    return board_cells[y][x].mine;
+}
+
+function calculateNumbers() {
+    mine_count = 0;
+    for (let y = 0; y < game_cols; y++) {
+        for (let x = 0; x < game_rows; x++) {
+            let cell = board_cells[y][x];
+            if (cell.mine) {
+                mine_count++;
+                continue;
+            }
+
+            let number = 0;
+            let sweeps = [[x-1,y+1],[x,y+1],[x+1,y+1],[x-1,y],[x+1,y],[x-1,y-1],[x,y-1],[x+1,y-1]];
+            sweeps.forEach(sweep => {
+                if (isCellMine(sweep[0], sweep[1])) {
+                    number++;
+                }
+            });
+            
+            cell.number = number;
+        }
+    }
+
+    console.log(`Mine Count: ${mine_count}`);
+}
+
+function revealAll() {
+    for (let y = 0; y < game_cols; y++) {
+        for (let x = 0; x < game_rows; x++) {
+            board_cells[y][x].sweep();
+        }
+    }
+
+    is_first_click = false;
+}
+
+function resetBoard() {
+    is_first_click = true;
+    for (let y = 0; y < game_cols; y++) {
+        for (let x = 0; x < game_rows; x++) {
+            let cell = board_cells[y][x];
+            cell.mine = false;
+            cell.number = false;
+            cell.revealed = false;
+            cell.flagged = false;
+            cell.el.classList.remove("cell-revealed-mine", "cell-revealed-clear");
+            cell.el.textContent = "";
+        }
+    }
+}
+
+document.addEventListener("keydown", (e) => {
+    if (e.code == "KeyE") {
+        e.preventDefault();
+        revealAll();
+    }
+    if (e.code == "KeyR") {
+        e.preventDefault();
+        resetBoard();
+    }
+
+    if (e.code == "KeyF") {
+        e.preventDefault();
+        is_flag_key_down = true;
+    }
+});
+
+document.addEventListener("keyup", (e) => {
+    if (e.code == "KeyF") {
+        e.preventDefault();
+        is_flag_key_down = false;
+    }
+})
