@@ -1,13 +1,21 @@
 const game_area = document.getElementById("game-area");
 
+// defaults
 let game_rows = 15;
 let game_cols = 15;
 cell_size = 40;
-let mine_probability = 0.05;
+let mine_probability = 0.2;
+
 let is_first_click = true;
-let mine_count = 0;
 let is_flag_key_down = false;
+
 let alive = true;
+let won = false;
+
+let mine_count = 0;
+let flag_count = 0;
+const mine_counter = document.getElementById("mine-counter");
+const flag_counter = document.getElementById("flag-counter");
 
 const dimension_x = document.getElementById("dimension-x");
 const dimension_y = document.getElementById("dimension-y");
@@ -35,6 +43,18 @@ dimension_y.addEventListener("change", () => {
     let total_area = 400 + Math.floor(game_rows/10) * 120;
     cell_size = total_area / dimension_x.value;
     createBoardCells();
+    resetBoard();
+});
+
+const mine_probability_slider = document.getElementById("mine-probability-slider");
+const mine_probability_label = document.getElementById("mine-probability-label");
+
+mine_probability_slider.addEventListener("input", () => {
+    mine_probability_label.textContent = `Mine Probability: ${mine_probability_slider.value}`;
+});
+
+mine_probability_slider.addEventListener("change", () => {
+    mine_probability = mine_probability_slider.value;
     resetBoard();
 });
 
@@ -116,11 +136,19 @@ class Cell {
                 this.sweep();
             } else if (e.button == 2 || is_flag_key_down) {
                 this.flagged = !this.flagged;
+
+                if (!this.revealed && !won) {
+                    flag_count += this.flagged ? 1 : -1; // increment/decrement flag counter if flag is added
+                    flag_counter.textContent = `Flags: ${flag_count}`;
+                }
+
                 if (this.revealed) {
                     this.flagged = false;
                 } else {
                     this.el.innerHTML = this.flagged ? "&#x2691;" : "";
                 }
+
+                checkForWin();
             }
         });
 
@@ -143,13 +171,43 @@ class Cell {
         if (this.mine) {
             this.el.textContent = "*";
             revealAll();
-            if (alive) {
-                console.log("ded");
-            }
             alive = false;
             setEmojiState("dead");
+            mine_counter.classList.add("game-lost");
+            flag_counter.classList.add("game-lost");
+        }
+
+        checkForWin();
+    }
+}
+
+function checkForWin() {
+    if (mine_count != flag_count) {
+        return
+    }
+
+    for (let y = 0; y < game_cols; y++) {
+        for (let x = 0; x < game_rows; x++) {
+            let cell = board_cells[y][x];
+
+            if (cell.mine && cell.revealed) {
+                return;
+            }
+
+            if (!cell.revealed && !cell.mine) {
+                return;
+            }
+
+            if (cell.mine && !cell.flagged) {
+                return;
+            }
         }
     }
+
+    setEmojiState("win");
+    mine_counter.classList.add("game-won");
+    flag_counter.classList.add("game-won");
+    won = true;
 }
 
 let board_cells = [];
@@ -242,7 +300,8 @@ function calculateNumbers() {
         }
     }
 
-    console.log(`Mine Count: ${mine_count}`);
+    mine_counter.textContent = `Mines: ${mine_count}`;
+    flag_counter.textContent = `Flags: ${flag_count}`;
 }
 
 function revealAll() {
@@ -261,7 +320,18 @@ function revealAll() {
 function resetBoard() {
     is_first_click = true;
     alive = true;
+    won = false;
     setEmojiState("alive");
+
+    mine_count = 0;
+    flag_count = 0;
+    mine_counter.textContent = `Mines: 0`;
+    flag_counter.textContent = `Flags: ${flag_count}`;
+    mine_counter.classList.remove("game-won");
+    flag_counter.classList.remove("game-won");
+    mine_counter.classList.remove("game-lost");
+    flag_counter.classList.remove("game-lost");
+
     for (let y = 0; y < game_cols; y++) {
         for (let x = 0; x < game_rows; x++) {
             let cell = board_cells[y][x];
@@ -276,14 +346,17 @@ function resetBoard() {
 }
 
 document.addEventListener("keydown", (e) => {
-    if (e.code == "KeyE") {
-        e.preventDefault();
-        revealAll();
-    }
-    if (e.code == "KeyR") {
-        e.preventDefault();
-        resetBoard();
-    }
+    // debug reveal all
+    // if (e.code == "KeyE") { 
+    //     e.preventDefault();
+    //     revealAll();
+    // }
+
+    // debug reset
+    // if (e.code == "KeyR") {
+    //     e.preventDefault();
+    //     resetBoard();
+    // }
 
     if (e.code == "KeyF") {
         e.preventDefault();

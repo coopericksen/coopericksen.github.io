@@ -77,8 +77,8 @@
 }
 
 :root:has(#theme-green:checked) {
-    --text-main: #F2E8CF;
-    --text-alt: #003f00;
+    --text-main: #003f00;
+    --text-alt: #F2E8CF;
     --background: #6A994E; 
     --primary: #A7C957;
     /* --secondary: #BC4749; */

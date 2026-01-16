@@ -19,7 +19,6 @@
 .board-row {
     display: flex;
     justify-content: center;
-    gap: 1px;
 }
 
 .cell {
@@ -60,15 +59,71 @@
 }
 
 #reset-button {
-    margin-inline: auto;
-    width: 50px;
-    height: 50px;
-    font-size: 1.8rem;
+    /* margin-inline: auto; */
+    padding: 0.5rem;
+    height: 100%;
+    aspect-ratio: 1/1;
+    font-size: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 1rem;
     background-color: var(--background);
     outline: 5px outset var(--border);
     outline-offset: -4px;
+    cursor: pointer;
+    user-select: none;
+}
+
+#reset-button:active {
+    background-color: var(--primary);
+    outline-color: var(--accent);
+    outline-width: 8px;
+    outline-offset: -7px;
+}
+
+#mine-probability {
+    display: inline-flex;
+    flex-direction: column;
+    border: 2px outset white;
+    padding: 0.5rem;
+    margin-inline: 1rem;
+}
+
+#bottom-controls {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+#mine-counter, #flag-counter {
+    width: 200px;
+    text-align: center;
+    font-size: 2rem;
+    outline: 5px outset var(--border);
+    outline-offset: -4px;
+    padding: 1rem;
+}
+
+.game-won {
+    color: #0f0;
+}
+
+.game-lost {
+    color: #f00;
+}
+
+.instructions-text {
+    text-align: center;
+    max-width: 600px;
+    margin-inline: auto;
 }
