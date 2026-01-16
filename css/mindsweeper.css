@@ -3,38 +3,72 @@
 #game-area {
     width: fit-content;
     height: fit-content;
-    border: 2px solid white;
     margin-inline: auto;
-    padding: 1rem;
+    padding: 3rem;
+    background-color: var(--background);
+    border-radius: 1rem;
 }
 
 #board {
+    display: flex;
+    flex-direction: column;
     background-color: var(--background);
+    gap: 1px;
 }
 
 .board-row {
     display: flex;
     justify-content: center;
+    gap: 1px;
 }
 
 .cell {
     user-select: none;
     background-color: var(--background);
-    border: 1px solid var(--border);
-    /* display: flex; */
+    outline: 3px outset var(--border);
+    outline-offset: -2px;
     text-align: center;
     align-content: center;
-    font-size: 1.3rem;
+    font-size: clamp(4px, 0.2rem + 1.1vw, 3rem);
     color: var(--text-main);
+    z-index: 1;
 }
 
 .cell-revealed-mine {
     background-color: var(--accent);
-    font-size: 2rem;
-    padding-top: 5px;
+    font-size: calc(clamp(4px, 0.1rem + 1.2vw, 3rem) * 1.5);
+    padding-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--text-alt);
 }
 
 .cell-revealed-clear {
     background-color: var(--primary);
+    outline: 1px solid var(--border);
+    outline-offset: 0;
+    z-index: 0;
+}
+
+#dimension-x, #dimension-y {
+    text-align: center;
+    width: 75px;
+    background-color: var(--background);
+    color: var(--text-main);
+    border: 2px outset var(--border);
+}
+
+#reset-button {
+    margin-inline: auto;
+    width: 50px;
+    height: 50px;
+    font-size: 1.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    background-color: var(--background);
+    outline: 5px outset var(--border);
+    outline-offset: -4px;
 }

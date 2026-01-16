@@ -1,11 +1,64 @@
 const game_area = document.getElementById("game-area");
 
-let game_rows = 10;
-let game_cols = 10;
-let mine_probability = 0.20;
+let game_rows = 15;
+let game_cols = 15;
+cell_size = 40;
+let mine_probability = 0.05;
 let is_first_click = true;
 let mine_count = 0;
 let is_flag_key_down = false;
+let alive = true;
+
+const dimension_x = document.getElementById("dimension-x");
+const dimension_y = document.getElementById("dimension-y");
+
+dimension_x.addEventListener("change", () => {
+    if (dimension_x.value < 5) {
+        dimension_x.value = 5;
+    } else if (dimension_x.value >= 50) {
+        dimension_x.value = 50;
+    }
+    game_rows = dimension_x.value;
+    let total_area = 400 + Math.floor(game_rows/10) * 120;
+    cell_size = total_area / dimension_x.value;
+    createBoardCells();
+    resetBoard();
+});
+
+dimension_y.addEventListener("change", () => {
+    if (dimension_y.value < 5) {
+        dimension_y.value = 5;
+    } else if (dimension_y.value >= 50) {
+        dimension_y.value = 50;
+    }
+    game_cols = dimension_y.value;
+    let total_area = 400 + Math.floor(game_rows/10) * 120;
+    cell_size = total_area / dimension_x.value;
+    createBoardCells();
+    resetBoard();
+});
+
+const reset_button = document.getElementById("reset-button");
+reset_button.onclick = resetBoard;
+
+function setEmojiState(state) {
+    let choices;
+    switch (state) {
+        case "alive": 
+            choices = ["&#128536;", "&#128527;", "&#128539;"];
+            reset_button.innerHTML = choices[Math.floor(Math.random() * choices.length)];
+            break;
+        case "dead": 
+            choices = ["&#128545;", "&#128565;", "&#128529;"];
+            reset_button.innerHTML = choices[Math.floor(Math.random() * choices.length)];
+            break;
+        case "win": 
+            choices = ["&#128520;", "&#128526;", "&#128521;", "&#128515;"];
+            reset_button.innerHTML = choices[Math.floor(Math.random() * choices.length)];
+            break;
+    }
+}
+setEmojiState("alive");
 
 // disable dragging
 document.body.ondragstart = () => {
@@ -32,8 +85,8 @@ class Cell {
 
         this.el = document.createElement("div");
         this.el.classList.add("cell");
-        this.el.style.width = "40px";
-        this.el.style.height = "40px";
+        this.el.style.width = `${cell_size}px`;
+        this.el.style.height = `${cell_size}px`;
 
         this.el.addEventListener("mouseover", () => {
             this.is_hovering = true;
@@ -83,36 +136,74 @@ class Cell {
 
         if (this.number > 0) {
             this.el.textContent = this.number;
+        } else if (!this.mine && alive) {
+            revealZeroZone(this.x, this.y);
         }
 
         if (this.mine) {
             this.el.textContent = "*";
-            console.log("ded");
+            revealAll();
+            if (alive) {
+                console.log("ded");
+            }
+            alive = false;
+            setEmojiState("dead");
         }
     }
 }
 
 let board_cells = [];
 const board = document.getElementById("board");
+createBoardCells();
 
-for (let i = 0; i < game_cols; i++) {
-    let board_row = [];
-    let board_row_el = document.createElement("div");
-    board_row_el.classList.add("board-row");
+function createBoardCells() {
+    board_cells.length = 0;
+    board.innerHTML = "";
 
-    for (let j = 0; j < game_rows; j++) {
-        let cell = new Cell(j, i);
-        board_row.push(cell);
-        board_row_el.appendChild(cell.el);
+    for (let i = 0; i < game_cols; i++) {
+        let board_row = [];
+        let board_row_el = document.createElement("div");
+        board_row_el.classList.add("board-row");
+
+        for (let j = 0; j < game_rows; j++) {
+            let cell = new Cell(j, i);
+            board_row.push(cell);
+            board_row_el.appendChild(cell.el);
+        }
+
+        board_cells.push(board_row);
+        board.appendChild(board_row_el);
     }
+}
 
-    board_cells.push(board_row);
-    board.appendChild(board_row_el);
+function revealZeroZone(x, y, visited = new Set()) {
+    // remember visited cells to avoid rechecking
+    const key = `${x},${y}`;
+    if (visited.has(key)) return;
+    visited.add(key);
+
+    let sweeps = [[x-1,y+1],[x,y+1],[x+1,y+1],[x-1,y],[x+1,y],[x-1,y-1],[x,y-1],[x+1,y-1]];
+
+    for (const [sx, sy] of sweeps) {
+        if (sx < 0 || sy < 0 || sx >= game_rows || sy >= game_cols) {
+            continue;
+        }
+
+        let cell = board_cells[sy][sx];
+        if (cell.mine || cell.revealed) {
+            continue;
+        }
+
+        cell.sweep();
+        if (cell.number == 0) {
+            revealZeroZone(sx, sy, visited);
+        }
+    };
 }
 
 function setupMines() {
-    for (let i = 0; i < game_cols; i++) {
-        for (let j = 0; j < game_rows; j++) {
+    for (let i = 0; i < game_rows; i++) {
+        for (let j = 0; j < game_cols; j++) {
             board_cells[j][i].mine = false;
             if (Math.random() < mine_probability) {
                 board_cells[j][i].mine = true;
@@ -157,7 +248,10 @@ function calculateNumbers() {
 function revealAll() {
     for (let y = 0; y < game_cols; y++) {
         for (let x = 0; x < game_rows; x++) {
-            board_cells[y][x].sweep();
+            let cell = board_cells[y][x];
+            if (!cell.revealed) {
+                cell.sweep();
+            }
         }
     }
 
@@ -166,6 +260,8 @@ function revealAll() {
 
 function resetBoard() {
     is_first_click = true;
+    alive = true;
+    setEmojiState("alive");
     for (let y = 0; y < game_cols; y++) {
         for (let x = 0; x < game_rows; x++) {
             let cell = board_cells[y][x];

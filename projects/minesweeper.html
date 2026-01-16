@@ -21,8 +21,13 @@
 
     <main>
         <h1 class="top-card glow-border">Minesweeper</h1>
-        <div id="game-area">
+        <div id="game-area" class="glow-border">
+            <button id="reset-button">&#128527;</button>
             <div id="board"></div>
+            <hr style="margin: 1rem;">
+            <input id="dimension-x" type="number" min="5" max=50 value=15>
+            <span>x</span>
+            <input id="dimension-y" type="number" min="5" max=50 value=15>
         </div>
     </main>
 
