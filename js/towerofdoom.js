@@ -1,0 +1,1 @@
+const game_area = document.getElementById("game-area");
