@@ -108,7 +108,7 @@ class Cell {
         this.el.style.width = `${cell_size}px`;
         this.el.style.height = `${cell_size}px`;
 
-        this.el.addEventListener("mouseover", () => {
+        this.el.addEventListener("mouseover", (e) => {
             this.is_hovering = true;
             if (is_mouse_down) {
                 if (is_first_click) {
@@ -117,7 +117,12 @@ class Cell {
                     calculateNumbers();
                     is_first_click = false;
                 }
-                this.sweep();
+
+                if (is_flag_key_down || e.buttons == 2) {
+                    this.flag();
+                } else {
+                    this.sweep();
+                }
             }
         });
 
@@ -135,20 +140,7 @@ class Cell {
                 }
                 this.sweep();
             } else if (e.button == 2 || is_flag_key_down) {
-                this.flagged = !this.flagged;
-
-                if (!this.revealed && !won) {
-                    flag_count += this.flagged ? 1 : -1; // increment/decrement flag counter if flag is added
-                    flag_counter.textContent = `Flags: ${flag_count}`;
-                }
-
-                if (this.revealed) {
-                    this.flagged = false;
-                } else {
-                    this.el.innerHTML = this.flagged ? "&#x2691;" : "";
-                }
-
-                checkForWin();
+                this.flag();
             }
         });
 
@@ -157,7 +149,30 @@ class Cell {
         })
     }
 
+    flag() {
+        this.flagged = !this.flagged;
+
+        if (!this.revealed && !won) {
+            flag_count += this.flagged ? 1 : -1; // increment/decrement flag counter if flag is added
+            flag_counter.textContent = `Flags: ${flag_count}`;
+        }
+
+        if (this.revealed) {
+            this.flagged = false;
+        } else {
+            this.el.innerHTML = this.flagged ? "&#x2691;" : "";
+        }
+
+        checkForWin();
+    }
+
     sweep() {
+        
+        // fix flag count if flagged is revealed
+        if (this.flagged) {
+            this.flag();
+        }
+
         this.revealed = true;
         
         this.el.classList.add(this.mine ? "cell-revealed-mine" : "cell-revealed-clear");
