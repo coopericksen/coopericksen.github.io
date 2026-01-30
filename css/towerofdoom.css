@@ -1,9 +1,27 @@
-main {
-    justify-content: center;
+#fullscreen-button {
+    margin: 1rem auto;
+    padding: 1rem;
+    border-radius: 1rem;
+    display: block;
+    cursor: pointer;
+    background-color: var(--primary);
+    color: var(--text-main);
+}
+
+#fullscreen-button:hover {
+    background-color: var(--accent);
+    color: var(--text-alt);
 }
 
 #game-area {
-    width: 500px;
-    height: 500px;
-    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    margin-inline: auto;
+}
+
+#game-canvas {
+    background-color: #fff;
+    margin-inline: auto;
 }
