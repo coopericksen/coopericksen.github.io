@@ -44,11 +44,18 @@ window.addEventListener("resize", resizeCanvas);
 document.addEventListener("fullscreenchange", resizeCanvas);
 document.addEventListener("DOMContentLoaded", resizeCanvas);
 
+/*
+    Classes
+
+    * Player
+    * Platform
+    * Object
+*/
+
 class Player {
     constructor() {
         this.start_x = 55;
-        // this.start_y = canvas.height-50;
-        this.start_y = 200;
+        this.start_y = canvas.height-50;
 
         this.x = this.start_x;
         this.y = this.start_y;
@@ -65,13 +72,18 @@ class Player {
         this.is_wallreset_ready = true;
         this.wallreset_cooldown = 0.2;
 
-        this.x_acceleration = 0.5;
-        this.friction = 0.3;
-        this.speed_cap_x = 5;
-
+        /*
+            Jump Strength and Gravity must be
+            signed according to canvas axis
+            with '-' being up and '+' being down
+        */
         this.jump_strength = -6;
         this.gravity = 0.3;
-        this.speed_cap_y = 20;
+
+        this.speed = 3;
+        this.friction = 0.3;
+        this.air_resistance = 0;
+        this.speed_cap = 20;
 
         this.width = 10;
         this.height = 10;
@@ -82,177 +94,14 @@ class Player {
     }
 
     update(delta_time) {
-        console.log(this.x, this.y, this.xv, this.yv);
-        // console.log(delta_time)
-
+        console.log(delta_time);
         /*
-            X Movement
-        */
-        this.handleHorizontalInputAxis();
+            Horizontal Input Handler
 
-        if (this.x_axis != 0) {
-            this.xv += this.x_axis * this.x_acceleration;
-        } else {
-            this.applyXFriction();
-        }
-
-        this.applyVelocityCap("xv");
-        this.handleXCollision();
-
-        /*
-            Y Movement
+            Set x_axis based on 'a' and 'd' keypresses
+            left: -1, right: 1, both/none: 0
         */
 
-        this.yv += this.gravity;
-        this.handleJump();
-        this.applyVelocityCap("yv");
-        this.handleYCollision();
-
-        this.render();
-    }
-
-    render() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
-    }
-
-    handleYCollision() {
-        let new_y = this.y + this.yv;
-        let colliding_platform_y = null;
-        let collision_type_y = null;
-
-        for (const platform of level_platforms) {
-            if (!this.isCollidingWith(platform, this.x, new_y)) {
-                continue;
-            }
-
-            if (platform.is_dangerous) {
-                this.resetToStartPosition();
-                break;
-            }
-
-            if (platform.is_checkpoint) {
-                this.setCheckpoint(platform);
-            }
-
-            colliding_platform_y = platform;
-            collision_type_y = (this.yv >= 0) ? "ground" : "ceiling";
-
-            break;
-
-        }
-
-        this.handleYMovement(new_y, colliding_platform_y, collision_type_y);
-    }
-
-    handleYMovement(new_y, colliding_platform_y, collision_type_y) {
-        if (!colliding_platform_y && (new_y >= this.radius && new_y <= canvas.height - this.radius)) {
-            this.y = new_y;
-            return;
-        }
-        
-        if (collision_type_y == "ground") {
-            this.y = colliding_platform_y.y1 - this.radius;
-            this.is_jump_ready = true;
-        }
-        
-        if (collision_type_y == "ceiling") {
-            this.y = colliding_platform_y.y2 + this.radius;
-        }
-
-        this.yv = 0;
-    }
-
-    handleJump() {
-        if (this.is_jump_down && this.is_jump_ready) {
-            this.yv = this.jump_strength;
-            this.is_jump_ready = false;
-        }
-    }
-
-    applyXFriction() {
-        if (Math.abs(this.xv) <= this.friction) {
-            this.xv = 0;
-        } else {
-            this.xv -= Math.sign(this.xv) * this.friction;
-        }
-    }
-
-    handleXCollision() {
-        let new_x = this.x + this.xv;
-        let colliding_platform_x = null;
-        let collision_type_x = null;
-
-        for (const platform of level_platforms) {
-            if (!this.isCollidingWith(platform, new_x, this.y)) {
-                continue;
-            }
-
-            if (platform.is_dangerous) {
-                this.resetToStartPosition();
-                break;
-            }
-
-            if (platform.is_checkpoint) {
-                this.setCheckpoint(platform);
-            }
-
-            colliding_platform_x = platform;
-            collision_type_x = (this.xv >= 0) ? "left" : "right";
-
-            break;
-
-        }
-
-        this.handleXMovement(new_x, colliding_platform_x, collision_type_x);
-    }
-
-    handleXMovement(new_x, colliding_platform_x, collision_type_x) {
-        if (!colliding_platform_x && (new_x >= this.radius && new_x <= canvas.width - this.radius)) {
-            this.x = new_x;
-            return;
-        }
-        
-        if (collision_type_x == "left") {
-            this.x = colliding_platform_x.x1 - this.radius;
-        }
-        
-        if (collision_type_x == "right") {
-            this.x = colliding_platform_x.x2 + this.radius;
-        }
-
-        this.xv = 0;
-        this.handleWallJump();
-    }
-
-    handleWallJump() {
-        if (this.is_wallreset_ready && this.jump_released) {
-            this.is_jump_ready = true;
-            this.is_wallreset_ready = false;
-            this.jump_released = false;
-
-            setTimeout(() => { 
-                this.is_wallreset_ready = true;
-            }, this.wallreset_cooldown * 1000);
-
-        }
-    }
-
-    applyVelocityCap(type) {
-        if (type == "xv") {
-            if (Math.abs(this.xv) > this.speed_cap_x) {
-                this.xv = Math.sign(this.xv) * this.speed_cap_x;
-            }
-        }
-
-        if (type == "yv") {
-            if (Math.abs(this.yv) > this.speed_cap_y) {
-                this.yv = Math.sign(this.yv) * this.speed_cap_y;
-            }
-        }
-    }
-
-    handleHorizontalInputAxis() {
         if (this.is_a_down && !this.is_d_down) {
             this.x_axis = -1;
         } else if (this.is_d_down && !this.is_a_down) {
@@ -260,6 +109,168 @@ class Player {
         } else {
             this.x_axis = 0;
         }
+
+        if (this.x_axis != 0) {
+            this.xv = this.x_axis * this.speed;
+            if (Math.abs(this.xv) > this.speed_cap) {
+                this.xv = Math.sign(this.xv) * this.speed_cap;
+            }
+        }
+
+        /*
+            Collision Check X
+
+            * Loop over platforms
+            * Resolve Collision
+                * If no collision 
+                    * Move x by xv
+                * If left collision
+                    * Move player to left of platform   
+                    * Reset x velocity
+                    * Reset jump if not on cooldown and jump has been released
+                * If right collision
+                    * Move player to right of platform   
+                    * Reset x velocity
+                    * Reset jump if not on cooldown and jump has been released
+            
+            * Slow xv to 0 based on friction
+                * Friction is used when on ground
+                * Air resistance when in air
+        */
+        
+
+        let new_x = this.x + this.xv;
+        let colliding_platform_x = null;
+        let collision_type_x = null;
+
+        for (const platform of level_platforms) {
+            if (this.isCollidingWith(platform, new_x, this.y)) {
+
+                // if platform is dangerous, reset player to start position
+                if (platform.is_dangerous) {
+                    this.resetToStartPosition();
+                    break;
+                } else {
+
+                    if (platform.is_checkpoint) {
+                        this.setCheckpoint(platform);
+                    }
+
+                    colliding_platform_x = platform;
+                    collision_type_x = (this.xv >= 0) ? "left" : "right";
+                    break;
+                }
+            }
+        };
+
+        if (!colliding_platform_x && (new_x >= this.radius && new_x <= canvas.width - this.radius)) {
+            this.x += this.xv;
+        } else if (collision_type_x == "left") {
+
+            this.x = colliding_platform_x.x1 - this.radius;
+            this.xv = 0;
+            if (this.is_wallreset_ready && this.jump_released) {
+                this.is_jump_ready = true;
+                this.is_wallreset_ready = false;
+                this.jump_released = false;
+                setTimeout(() => {
+                    this.is_wallreset_ready = true;
+                }, this.wallreset_cooldown * 1000);
+            }
+            
+        } else if (collision_type_x == "right") {
+
+            this.x = colliding_platform_x.x2 + this.radius;
+            this.xv = 0;
+            if (this.is_wallreset_ready && this.jump_released) {
+                this.is_jump_ready = true;
+                this.is_wallreset_ready = false;
+                this.jump_released = false;
+                setTimeout(() => {
+                    this.is_wallreset_ready = true;
+                }, this.wallreset_cooldown * 1000);
+            }
+
+        }
+
+        if (Math.abs(this.xv) <= this.friction) {
+            this.xv = 0;
+        } else {
+            this.xv -= Math.sign(this.xv) * ((this.is_jump_ready) ? this.friction : this.air_resistance);
+        }
+
+        /*
+            Collision Check Y
+
+            * Apply gravity 
+            * Jump if ready and key pressed
+
+            * Loop over platforms
+                * Store collided platform
+                * Store type of collision
+            * Resolve Collision           
+                * If no collision
+                    * Move y by yv
+                * If ground collision
+                    * Move player to top of platform
+                    * Reset y velocity
+                    * Enable jumping
+                * If ceiling collision
+                    * Move player to bottom of platform
+                    * Reset y velocity
+
+        */
+
+        this.yv += this.gravity;
+
+        // Cap y speed
+        if (Math.abs(this.yv) > this.speed_cap) {
+            this.yv = Math.sign(this.yv) * this.speed_cap;
+        }
+
+        if (this.is_jump_down && this.is_jump_ready) {
+            this.yv = this.jump_strength;
+            this.is_jump_ready = false;
+        }
+
+        let new_y = this.y + this.yv;
+        let colliding_platform_y = null;
+        let collision_type_y = null;
+
+        for (const platform of level_platforms) {
+            if (this.isCollidingWith(platform, this.x, new_y)) {
+                if (platform.is_dangerous) {
+                    this.resetToStartPosition();
+                    break;
+                } else {
+                    if (platform.is_checkpoint) {
+                        this.setCheckpoint(platform);
+                    }
+
+                    colliding_platform_y = platform;
+                    collision_type_y = (this.yv >= 0) ? "ground" : "ceiling";
+                    break;
+                }
+            }
+        };
+
+        if (!colliding_platform_y && (new_y >= this.radius && new_y <= canvas.height - this.radius)) {
+            this.y = new_y;
+        } else if (collision_type_y == "ground") {
+            this.y = colliding_platform_y.y1 - this.radius;
+            this.yv = 0;
+            this.is_jump_ready = true;
+        } else if (collision_type_y == "ceiling") {
+            this.y = colliding_platform_y.y2 + this.radius;
+            this.yv = 0;
+        }
+
+        this.render();
+    }
+
+    render() {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
     }
 
     isCollidingWith(object, new_x=this.x, new_y=this.y) {
