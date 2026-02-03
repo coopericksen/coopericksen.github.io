@@ -41,7 +41,8 @@ function resizeCanvas() {
 }
 
 window.addEventListener("resize", resizeCanvas);
-document.addEventListener("fullscreenchange", resizeCanvas)
+document.addEventListener("fullscreenchange", resizeCanvas);
+document.addEventListener("DOMContentLoaded", resizeCanvas);
 
 /*
     Classes
@@ -53,8 +54,11 @@ document.addEventListener("fullscreenchange", resizeCanvas)
 
 class Player {
     constructor() {
-        this.x = canvas.width/2;
-        this.y = canvas.height/2;
+        this.start_x = 55;
+        this.start_y = canvas.height-50;
+
+        this.x = this.start_x;
+        this.y = this.start_y;
         this.xv = 0;
         this.yv = 0;
 
@@ -79,14 +83,18 @@ class Player {
         this.speed = 4;
         this.friction = 0.4;
         this.air_resistance = 0.1;
+        this.speed_cap = 20;
 
         this.width = 10;
         this.height = 10;
         this.radius = this.width/2;
         this.color = "#0070fa";
+
+        this.checkpoint = null;
     }
 
-    update() {
+    update(delta_time) {
+        // console.log(delta_time);
         /*
             Horizontal Input Handler
 
@@ -101,10 +109,12 @@ class Player {
         } else {
             this.x_axis = 0;
         }
-        console.log(this.x_axis)
 
         if (this.x_axis != 0) {
             this.xv = this.x_axis * this.speed;
+            if (Math.abs(this.xv) > this.speed_cap) {
+                this.xv = Math.sign(this.xv) * this.speed_cap;
+            }
         }
 
         /*
@@ -133,15 +143,41 @@ class Player {
         let colliding_platform_x = null;
         let collision_type_x = null;
 
-        for (const platform of platforms) {
+        for (const platform of level_platforms) {
             if (this.isCollidingWith(platform, new_x, this.y)) {
-                colliding_platform_x = platform;
-                collision_type_x = (this.xv >= 0) ? "left" : "right";
-                break;
+
+                // if platform is dangerous, reset player to start position
+                if (platform.is_dangerous) {
+                    this.resetToStartPosition();
+                    break;
+                } else {
+
+                    if (platform.is_checkpoint) {
+                        this.setCheckpoint(platform);
+                    }
+
+                    const was_left_collision = this.x + this.radius <= platform.x1;
+                    const was_right_collision = this.x - this.radius >= platform.x2;
+
+                    if (was_left_collision && this.xv > 0) {
+                        colliding_platform_x = platform;
+                        collision_type_x = "left";
+                        break;
+                    }
+
+                    if (was_right_collision && this.xv < 0) {
+                        colliding_platform_x = platform;
+                        collision_type_x = "right";
+                        break;
+                    }
+                    // colliding_platform_x = platform;
+                    // collision_type_x = (this.xv >= 0) ? "left" : "right";
+                    // break;
+                }
             }
         };
 
-        if (!colliding_platform_x) {
+        if (!colliding_platform_x && (new_x >= this.radius && new_x <= canvas.width - this.radius)) {
             this.x += this.xv;
         } else if (collision_type_x == "left") {
 
@@ -174,7 +210,6 @@ class Player {
         if (Math.abs(this.xv) <= this.friction) {
             this.xv = 0;
         } else {
-            console.log(Math.sign(this.xv) * this.friction)
             this.xv -= Math.sign(this.xv) * ((this.is_jump_ready) ? this.friction : this.air_resistance);
         }
 
@@ -202,6 +237,11 @@ class Player {
 
         this.yv += this.gravity;
 
+        // Cap y speed
+        if (Math.abs(this.yv) > this.speed_cap) {
+            this.yv = Math.sign(this.yv) * this.speed_cap;
+        }
+
         if (this.is_jump_down && this.is_jump_ready) {
             this.yv = this.jump_strength;
             this.is_jump_ready = false;
@@ -210,17 +250,25 @@ class Player {
         let new_y = this.y + this.yv;
         let colliding_platform_y = null;
         let collision_type_y = null;
-        let closest_collision = Infinity;
 
-        for (const platform of platforms) {
+        for (const platform of level_platforms) {
             if (this.isCollidingWith(platform, this.x, new_y)) {
-                colliding_platform_y = platform;
-                collision_type_y = (this.yv >= 0) ? "ground" : "ceiling";
-                break;
+                if (platform.is_dangerous) {
+                    this.resetToStartPosition();
+                    break;
+                } else {
+                    if (platform.is_checkpoint) {
+                        this.setCheckpoint(platform);
+                    }
+
+                    colliding_platform_y = platform;
+                    collision_type_y = (this.yv >= 0) ? "ground" : "ceiling";
+                    break;
+                }
             }
         };
 
-        if (!colliding_platform_y) {
+        if (!colliding_platform_y && (new_y >= this.radius && new_y <= canvas.height - this.radius)) {
             this.y = new_y;
         } else if (collision_type_y == "ground") {
             this.y = colliding_platform_y.y1 - this.radius - 1;
@@ -248,18 +296,31 @@ class Player {
         const is_within_x = (new_x + this.radius >= object.x1 && new_x - this.radius <= object.x2);
         const is_within_y = (new_y + this.radius >= object.y1 && new_y - this.radius <= object.y2);
 
-        if (is_within_x && is_within_y) {
-            return true;
-        }
+        return is_within_x && is_within_y
+    }
 
-        return false;
+    resetToStartPosition() {
+        console.log("resetting")
+        this.x = this.start_x;
+        this.y = this.start_y;
+        this.xv = 0;
+        this.yv = 0;
+    }
+
+    setCheckpoint(checkpoint) {
+        if (this.checkpoint != checkpoint.checkpoint_id) {
+            console.log("checkpoint set")
+            this.start_x = checkpoint.checkpoint_x;
+            this.start_y = checkpoint.checkpoint_y;
+            this.checkpoint = checkpoint.checkpoint_id;
+        }
     }
 }
 
 const player = new Player();
 
 class Platform {
-    constructor(x1, y1, x2, y2) {
+    constructor(x1, x2, y1, y2, is_dangerous=false, is_checkpoint=false, checkpoint_id=null) {
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y1;
@@ -269,9 +330,20 @@ class Platform {
 
         this.width = x2 - x1;
         this.height = y2 - y1;
-        this.color = "#000";
-        console.log(this.width)
-        console.log(this.height)
+
+        if (is_dangerous) {
+            this.color = "#D40C0C";
+        } else if (is_checkpoint) {
+            this.color = "#0f0";
+            this.checkpoint_x = (this.x1 + this.x2)/2;
+            this.checkpoint_y = this.y1 + 5;
+            this.checkpoint_id = checkpoint_id;
+        } else {
+            this.color = "#007070";
+        }
+
+        this.is_dangerous = is_dangerous;
+        this.is_checkpoint = is_checkpoint;
     }
 
     render() {
@@ -280,34 +352,78 @@ class Platform {
     }
 }
 
-const platform1 = new Platform(canvas.width/2-300, canvas.height/2+100, canvas.width/2+300, canvas.height/2+120);
-const platform2 = new Platform(canvas.width/2+100, canvas.height/2-40, canvas.width/2+120, canvas.height/2+100);
-const platform3 = new Platform(canvas.width/2-200, canvas.height/2-80, canvas.width/2+300, canvas.height/2-60);
-let platforms = [platform1, platform2, platform3];
+const level = [
+    // [canvas.width/2-300, canvas.height/2+100, canvas.width/2+300, canvas.height/2+120],
+    // [canvas.width/2+100, canvas.height/2-40, canvas.width/2+120, canvas.height/2+100],
+    // [canvas.width/2-200, canvas.height/2-80, canvas.width/2+300, canvas.height/2-60]
+
+    /*
+        [x1, x2, y1, y2, is_dangerous, is_checkpoint, checkpoint_id]
+    */
+
+    // Level border
+    [0, canvas.width, 0, 20],
+    [0, canvas.width, canvas.height-20, canvas.height],
+    [0, 20, 0, canvas.height],
+    [canvas.width-20, canvas.width, 0, canvas.height],
+
+
+    // Level walls
+    [20, 300, canvas.height-300, canvas.height-120],
+    [300, 500, canvas.height-300, canvas.height-150],
+    [500, canvas.width-200, canvas.height-300, canvas.height-180],
+
+    [250, 500, canvas.height-60, canvas.height-20],
+    [500, 550, canvas.height-30, canvas.height-20, is_dangerous=true],
+    [550, 700, canvas.height-60, canvas.height-20],
+
+    [750, 800, canvas.height-25, canvas.height-20, is_dangerous=false, is_checkpoint=true, checkpoint_id=0],
+
+    [850, 1259, canvas.height-60, canvas.height-20],
+
+];
+
+let level_platforms = [];
+
+for (let i = 0; i < level.length; i++) {
+    let platformCoords = level[i];
+    let platform = new Platform(platformCoords[0], platformCoords[1], platformCoords[2], platformCoords[3], platformCoords[4], platformCoords[5], platformCoords[6]);
+    level_platforms.push(platform);
+}
 
 /*
     Main Game Loop
 
     * Clears entire frame
-    * Render platform
     * Update & Render player
         * Check player collisions with objects
         * Render final position
+    * Render platform
+    * Render Fps counter
 
 */
 
-function gameLoop() {
+let last_timestamp = 0;
+function gameLoop(timestamp) {
+    const delta_time = timestamp - last_timestamp;
+    last_timestamp = timestamp;
+    const fps = 1000 / delta_time;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#f00"
-    ctx.fillRect(0, 0, 5, canvas.height);
-    ctx.fillRect(0, 0, canvas.width, 5);
-    ctx.fillRect(0, canvas.height-5, canvas.width, 5);
-    ctx.fillRect(canvas.width-5, 0, 5, canvas.height);
 
-    player.update();
-    platforms.forEach(platform => {
+    player.update(delta_time / 1000);
+    level_platforms.forEach(platform => {
         platform.render();
     })
+
+    // ctx.fillStyle = "#0f0";
+    // ctx.fillRect(0, 0, 5, canvas.height);
+    // ctx.fillRect(0, 0, canvas.width, 5);
+    // ctx.fillRect(0, canvas.height-5, canvas.width, 5);
+    // ctx.fillRect(canvas.width-5, 0, 5, canvas.height);
+
+    ctx.fillStyle = "#000";
+    ctx.font = "12px sans serif";
+    ctx.fillText(`FPS: ${fps.toFixed(0)}`, 6, 16);
 
     requestAnimationFrame(gameLoop);
 }
